@@ -170,6 +170,20 @@
         document.addEventListener('mousedown', (e) => { if(!menu.contains(e.target)) menu.style.display = 'none'; });
        </script>
 <h3 style="text-align: center; color: white;">صنع من طرف المبرمج حاتم ايت اجو</h3>
+    <button onclick="logout()" style="background-color: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: 'Cairo', sans-serif;">
+  تسجيل الخروج
+</button>
+
+<script>
+function logout() {
+    let confirmLogout = confirm("هل تريد حقاً تسجيل الخروج من iHatimOS؟");
+    if (confirmLogout) {
+        alert("مع السلامة يا مبرمج حاتم! نراك قريباً.");
+        window.close(); // يحاول إغلاق النافذة
+        window.location.href = "about:blank"; // يحول الصفحة لبيضاء إذا لم يغلق المتصفح النافذة
+    }
+}
+</script>
 </body>
     </script>
 </body>
