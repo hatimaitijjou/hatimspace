@@ -2,86 +2,72 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HATIM SPACE | AI LEGENDARY</title>
+    <title>HATIM SPACE | Ultimate AI Writer</title>
     <style>
-        :root { --primary: #00ff41; --bg: #050505; --sidebar: #0a0a0a; --page: #ffffff; }
-        body { margin: 0; background: var(--bg); color: #eee; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        :root { --primary: #00ff41; --bg: #0a0a0a; --page: #ffffff; }
+        .theme-sky { --primary: #00d4ff; --bg: #001524; }
+        .theme-fire { --primary: #ff4d4d; --bg: #1a0000; }
 
-        /* شاشة الدخول الأسطورية */
-        #login-screen { position: fixed; inset: 0; background: black; z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: #111; padding: 50px; border-radius: 30px; border: 2px solid var(--primary); text-align: center; box-shadow: 0 0 30px var(--primary); }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; height: 100vh; transition: 0.5s; overflow: hidden; }
+        
+        /* شريط الأدوات */
+        .toolbar { background: #161616; padding: 12px; display: flex; gap: 10px; border-bottom: 1px solid #333; align-items: center; z-index: 100; }
+        .t-btn { background: #222; border: 1px solid #444; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .t-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* شريط الأدوات العلوي */
-        .toolbar { background: var(--sidebar); padding: 15px 25px; display: flex; gap: 15px; border-bottom: 1px solid #222; align-items: center; justify-content: space-between; }
-        .t-btn { background: #151515; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; }
-        .t-btn:hover { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        .main { flex: 1; display: flex; overflow: hidden; }
+        
+        /* المحرر (الذكاء يكتب هنا) */
+        .editor-zone { flex: 1; padding: 40px; overflow-y: auto; display: flex; justify-content: center; position: relative; }
+        #editor { width: 100%; max-width: 800px; min-height: 1000px; background: var(--page); color: #222; padding: 60px; border-radius: 12px; outline: none; font-size: 19px; line-height: 1.8; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
 
-        /* زر HATIM SPACE AI */
-        .ai-btn { background: linear-gradient(45deg, #00ff41, #00d4ff); color: black; border: none; padding: 12px 25px; border-radius: 15px; cursor: pointer; font-weight: 900; animation: glow 2s infinite; }
-        @keyframes glow { 0% { box-shadow: 0 0 5px #00ff41; } 50% { box-shadow: 0 0 20px #00d4ff; } 100% { box-shadow: 0 0 5px #00ff41; } }
-
-        .main-container { flex: 1; display: flex; overflow: hidden; }
-
-        /* الشات (KUL) */
-        #chat-sidebar { width: 320px; background: var(--sidebar); border-left: 1px solid #222; display: flex; flex-direction: column; }
-        #chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .msg { background: #1a1a1a; padding: 15px; border-radius: 15px; border-right: 5px solid var(--primary); position: relative; }
-        .msg b { color: var(--primary); font-size: 11px; display: block; margin-bottom: 5px; }
-
-        /* المحرر (Notion Style) */
-        .workspace { flex: 1; padding: 40px; overflow-y: auto; background: #080808; display: flex; justify-content: center; position: relative; }
-        #editor { width: 100%; max-width: 850px; min-height: 1000px; background: var(--page); color: #111; padding: 80px; outline: none; border-radius: 20px; font-size: 19px; line-height: 1.8; box-shadow: 0 10px 50px rgba(0,0,0,0.8); }
-
-        /* قائمة السلاش */
-        #slash-menu { position: absolute; background: #111; border: 1px solid var(--primary); border-radius: 15px; width: 240px; display: none; z-index: 1000; padding: 10px; }
-        .slash-item { padding: 12px; cursor: pointer; border-radius: 10px; color: white; transition: 0.2s; }
+        /* قائمة السلاش الذكية */
+        #slash-menu { position: absolute; background: #1a1a1a; border: 1px solid var(--primary); border-radius: 10px; width: 260px; display: none; z-index: 1000; padding: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .slash-item { padding: 12px; cursor: pointer; border-radius: 7px; color: #eee; transition: 0.2s; display: flex; align-items: center; gap: 10px; font-size: 14px; }
         .slash-item:hover { background: var(--primary); color: black; font-weight: bold; }
+
+        /* شات HATIM AI للدردشة */
+        .ai-chat { width: 320px; background: #111; border-right: 1px solid #333; display: flex; flex-direction: column; }
+        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px; border-radius: 10px; font-size: 14px; background: #222; border-right: 4px solid var(--primary); color: #eee; }
+        .msg b { color: var(--primary); display: block; margin-bottom: 5px; font-size: 11px; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-card">
-            <h1 style="color:var(--primary); font-size: 3rem; margin:0;">HATIM SPACE</h1>
-            <p style="color:#666; letter-spacing: 5px; margin-bottom: 30px;">LEGENDARY AI EDITION</p>
-            <input type="text" id="user-name" placeholder="اسم القائد" style="width:80%; padding:15px; border-radius:10px; background:#000; color:white; border:1px solid #333;">
-            <br><br>
-            <button class="t-btn" style="width:80%; background:var(--primary); color:black;" onclick="start()">إطلاق المشروع 🚀</button>
-        </div>
-    </div>
-
     <header class="toolbar">
-        <div style="display:flex; gap:10px;">
-            <button class="t-btn" onclick="exec('bold')">B</button>
-            <button class="t-btn" onclick="exec('italic')">I</button>
-            <div class="color-picker" style="display:flex; gap:5px; margin-right:20px;">
-                <div onclick="chCol('#00ff41')" style="width:20px; height:20px; background:#00ff41; border-radius:50%; cursor:pointer;"></div>
-                <div onclick="chCol('#ff007b')" style="width:20px; height:20px; background:#ff007b; border-radius:50%; cursor:pointer;"></div>
-                <div onclick="chCol('#00d4ff')" style="width:20px; height:20px; background:#00d4ff; border-radius:50%; cursor:pointer;"></div>
-            </div>
-        </div>
-        <button class="ai-btn" onclick="window.open('https://gemini.google.com', '_blank')">✨ HATIM SPACE AI</button>
+        <div style="color: var(--primary); font-weight: bold; font-size: 1.2rem; margin-left: 20px;">HATIM SPACE OS</div>
+        <button class="t-btn" onclick="exec('bold')">B</button>
+        <button class="t-btn" onclick="exec('italic')">I</button>
+        <input type="color" onchange="exec('foreColor', this.value)" title="تغيير لون الجملة" style="width:30px; border:none; background:none; cursor:pointer;">
+        
+        <select class="t-btn" onchange="document.body.className = this.value" style="margin-right: auto;">
+            <option value="">🟢 نيون</option>
+            <option value="theme-sky">🔵 سماء</option>
+            <option value="theme-fire">🔴 نار</option>
+        </select>
     </header>
 
-    <div class="main-container">
-        <div class="workspace">
-            <div id="editor" contenteditable="true">
-                <h1>مرحبا بك يا قائد 🪐</h1>
-                <p>اكتب <b>/</b> لتفعيل قوى HATIM SPACE AI...</p>
-            </div>
-            <div id="slash-menu">
-                <div class="slash-item" onclick="ins('h1')">📝 عنوان أسطوري</div>
-                <div class="slash-item" onclick="ins('code')">💻 صندوق برمجيات</div>
-                <div class="slash-item" onclick="ins('todo')">✅ قائمة مهام احترافية</div>
+    <div class="main">
+        <div class="ai-chat">
+            <div style="padding:15px; background: #1a1a1a; font-weight:bold; color: var(--primary); border-bottom: 1px solid #333;">🤖 HATIM AI CHAT</div>
+            <div id="chat-messages"></div>
+            <div style="padding:15px; border-top: 1px solid #333;">
+                <input type="text" id="chat-input" placeholder="دردش مع الذكاء..." onkeypress="if(event.key==='Enter') chatWithAI()" style="width:100%; padding:10px; background:#000; border:1px solid #444; color:white; border-radius:8px; outline:none;">
             </div>
         </div>
 
-        <div id="chat-sidebar">
-            <div style="padding:20px; border-bottom:1px solid #222; font-weight:bold; color:var(--primary);">القنوات الحية ●</div>
-            <div id="chat-messages"></div>
-            <div style="padding:20px; background:#080808; border-top:1px solid #222;">
-                <input type="text" id="chat-input" placeholder="تواصل مع الفريق..." onkeypress="if(event.key==='Enter') send()" style="width:100%; background:#000; border:1px solid #333; color:white; padding:12px; border-radius:10px; outline:none;">
+        <div class="editor-zone">
+            <div id="editor" contenteditable="true" spellcheck="false">
+                <h1>مرحبا بك يا قائد 🚀</h1>
+                <p>اكتب <b>/</b> لتجعل HATIM AI يكتب بدلاً منك أو يغير التنسيق...</p>
+            </div>
+            
+            <div id="slash-menu">
+                <div class="slash-item" onclick="aiAction('write_para')">✍️ اطلب من AI كتابة فقرة</div>
+                <div class="slash-item" onclick="aiAction('write_code')">💻 اطلب من AI كتابة كود</div>
+                <div class="slash-item" onclick="ins('h1')">📝 عنوان أسطوري</div>
+                <div class="slash-item" onclick="ins('todo')">✅ قائمة مهام</div>
             </div>
         </div>
     </div>
@@ -90,7 +76,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
-        // إعدادات Firebase الحقيقية من لقطة الشاشة الخاصة بك
+        // إعدادات Firebase الحقيقية من صورتك
         const firebaseConfig = {
           apiKey: "AIzaSyBYW9x3xQvcZugc0mJx5iFbByPtGkXNx4M",
           authDomain: "hatim-space-4f7e8.firebaseapp.com",
@@ -100,62 +86,71 @@
           messagingSenderId: "1014020499692",
           appId: "1:1014020499692:web:37e023621b0ff9ee59ddc9"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        let myName = "";
 
-        function start() {
-            const n = document.getElementById('user-name').value;
-            if(n) {
-                myName = n;
-                document.getElementById('login-screen').style.display = 'none';
-                listen();
-                // ترحيب HATIM SPACE AI الأسطوري
-                db.ref('messages').push({ 
-                    name: "🤖 HATIM SPACE AI", 
-                    text: "تم تفعيل البروتوكول الأسطوري! أهلاً بك يا كابتن " + myName + ". كيف نسحق الأهداف اليوم؟" 
-                });
-            }
-        }
-
-        function chCol(h) { document.documentElement.style.setProperty('--primary', h); }
+        function exec(cmd, val = null) { document.execCommand(cmd, false, val); }
 
         const editor = document.getElementById('editor');
         const menu = document.getElementById('slash-menu');
 
+        // ميزة السلاش (Slash)
         editor.addEventListener('keyup', (e) => {
             const sel = window.getSelection();
-            if(sel.rangeCount > 0 && sel.getRangeAt(0).startContainer.textContent.endsWith('/')) {
-                const rect = sel.getRangeAt(0).getBoundingClientRect();
-                menu.style.display = 'block';
-                menu.style.top = (rect.bottom + window.scrollY - 100) + 'px';
-                menu.style.left = rect.left + 'px';
-            } else { menu.style.display = 'none'; }
+            if(sel.rangeCount > 0) {
+                const range = sel.getRangeAt(0);
+                const text = range.startContainer.textContent.slice(0, range.startOffset);
+                if(text.endsWith('/')) {
+                    const rect = range.getBoundingClientRect();
+                    menu.style.display = 'block';
+                    menu.style.top = (rect.bottom + window.scrollY - 80) + 'px';
+                    menu.style.left = rect.left + 'px';
+                } else { menu.style.display = 'none'; }
+            }
         });
 
-        function ins(t) {
-            editor.focus(); document.execCommand('delete', false, null);
-            if(t === 'h1') document.execCommand('formatBlock', false, 'H1');
-            if(t === 'code') document.execCommand('insertHTML', false, '<pre style="background:#222; color:#00ff41; padding:15px; border-radius:10px;">// اكتب كودك الأسطوري هنا</pre>');
-            if(t === 'todo') document.execCommand('insertHTML', false, '<div><input type="checkbox"> مهمة منجزة</div>');
+        // ميزة: الذكاء يكتب داخل المحرر
+        function aiAction(type) {
             menu.style.display = 'none';
+            exec('delete'); // حذف السلاش
+            const loading = "... جاري تفكير HATIM AI ...";
+            exec('insertHTML', `<span id="ai-loading" style="color:var(--primary)">${loading}</span>`);
+            
+            setTimeout(() => {
+                const loader = document.getElementById('ai-loading');
+                if(loader) loader.remove();
+                
+                let content = "";
+                if(type === 'write_para') content = "هذه فقرة أسطورية كتبها HATIM SPACE AI لتوضيح قوة الذكاء الاصطناعي في مشروعك الجديد. الإبداع ليس له حدود!";
+                if(type === 'write_code') content = '<pre style="background:#222; color:#00ff41; padding:15px; border-radius:8px;">function hatimPower() {\n  console.log("HATIM SPACE IS LIVE!");\n}</pre>';
+                
+                exec('insertHTML', content);
+            }, 1500);
         }
 
-        function send() {
-            const i = document.getElementById('chat-input');
-            if(i.value) { db.ref('messages').push({ name: myName, text: i.value }); i.value = ""; }
+        // ميزة: الدردشة الحية مع AI
+        function chatWithAI() {
+            const input = document.getElementById('chat-input');
+            const box = document.getElementById('chat-messages');
+            if(!input.value) return;
+
+            // إضافة رسالتك
+            box.innerHTML += `<div class="msg" style="border-right-color:#555"><b>أنت</b> ${input.value}</div>`;
+            
+            // رد HATIM AI
+            setTimeout(() => {
+                box.innerHTML += `<div class="msg"><b>🤖 HATIM AI</b> أهلاً بك! أنا هنا لمساعدتك في الكتابة والبرمجة داخل مساحتك الأسطورية.</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 800);
+            
+            input.value = "";
         }
 
-        function listen() {
-            db.ref('messages').limitToLast(20).on('child_added', (s) => {
-                const d = s.val();
-                const div = document.createElement('div');
-                div.className = "msg";
-                div.innerHTML = `<b>${d.name}</b> ${d.text}`;
-                document.getElementById('chat-messages').appendChild(div);
-                document.getElementById('chat-messages').scrollTop = 10000;
-            });
+        function ins(t) {
+            menu.style.display = 'none';
+            exec('delete');
+            if(t === 'h1') exec('formatBlock', 'H1');
+            if(t === 'todo') exec('insertHTML', '<div><input type="checkbox"> مهمة جديدة</div>');
         }
     </script>
 </body>
