@@ -3,167 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iHatimOS | Notion Style</title>
+    <title>Hatim Space | المبرمج حاتم ايت اجو</title>
     <style>
-        :root { --primary: #00ff41; --bg: #0d0d0d; }
+        :root { --primary: #00ff41; --bg: #050505; --glass: rgba(15, 15, 15, 0.95); }
         body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; overflow: hidden; height: 100vh; }
 
-        /* شاشة البداية */
+        /* شاشة الإقلاع (Splash Screen) */
         #splash {
             position: fixed; inset: 0; background: black; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: 0.8s;
+            transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .loader { width: 200px; height: 3px; background: #222; margin-top: 20px; border-radius: 10px; overflow: hidden; }
-        .progress { width: 0%; height: 100%; background: var(--primary); transition: 0.3s; }
+        .logo-box { text-align: center; animation: fadeIn 1.5s ease; }
+        .logo-title { font-size: 3.5rem; color: var(--primary); text-shadow: 0 0 25px var(--primary); margin: 0; }
+        .dev-credit { color: #555; font-family: monospace; letter-spacing: 2px; margin-top: 5px; }
+        
+        .loader-wrap { width: 200px; height: 2px; background: #111; margin-top: 30px; border-radius: 10px; overflow: hidden; }
+        .bar { width: 0%; height: 100%; background: var(--primary); transition: 0.3s; box-shadow: 0 0 10px var(--primary); }
 
         /* الواجهة الرئيسية */
-        #app { opacity: 0; transition: 1s; height: 100vh; display: flex; flex-direction: column; }
-        .top-nav { padding: 10px 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; background: #111; }
-
-        .editor-container { flex: 1; padding: 40px; overflow-y: auto; position: relative; display: flex; justify-content: center; }
-        #editor { 
-            width: 100%; max-width: 800px; outline: none; font-size: 1.2rem; 
-            line-height: 1.6; color: #efefef; min-height: 500px;
+        #app { opacity: 0; transition: 1.2s; height: 100vh; display: flex; flex-direction: column; }
+        
+        header { 
+            padding: 15px 30px; background: #0a0a0a; border-bottom: 1px solid #1a1a1a;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        #editor:empty:before { content: "اكتب / للأوامر أو ابدأ الكتابة..."; color: #555; }
+
+        .editor-zone { flex: 1; padding: 50px 20px; overflow-y: auto; display: flex; justify-content: center; position: relative; }
+        #editor { 
+            width: 100%; max-width: 800px; outline: none; font-size: 1.3rem; 
+            line-height: 1.8; color: #e0e0e0; min-height: 60vh;
+        }
+        #editor:empty:before { content: "اكتب / للأوامر السريعة..."; color: #333; }
 
         /* قائمة السلاش (Notion Style) */
         #slash-menu {
-            position: absolute; background: #1a1a1a; border: 1px solid #333;
-            border-radius: 8px; width: 220px; display: none; z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 5px;
+            position: absolute; background: var(--glass); border: 1px solid #222;
+            border-radius: 10px; width: 250px; display: none; z-index: 1000;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); padding: 6px; backdrop-filter: blur(15px);
         }
         .slash-item {
-            padding: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px;
-            border-radius: 5px; transition: 0.2s; font-size: 0.9rem;
+            padding: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+            border-radius: 6px; transition: 0.2s; font-size: 0.9rem; color: #ccc;
         }
-        .slash-item:hover { background: var(--primary); color: black; }
-        .slash-item span { font-size: 1.2rem; }
+        .slash-item:hover { background: var(--primary); color: black; font-weight: bold; }
+        .slash-item b { font-size: 1.2rem; }
 
-        /* التنبيهات */
-        #toast {
-            position: fixed; bottom: 20px; right: 20px; background: var(--primary);
-            color: black; padding: 10px 20px; border-radius: 5px; display: none; font-weight: bold;
+        /* تذييل الصفحة (Footer) */
+        footer {
+            padding: 12px; text-align: center; background: #080808; border-top: 1px solid #111;
+            font-size: 0.8rem; color: #444; letter-spacing: 0.5px;
         }
+        .highlight { color: var(--primary); opacity: 0.8; }
+
+        /* أنيميشن */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div id="splash">
-        <h1 style="color:var(--primary); text-shadow: 0 0 15px var(--primary);">iHatimOS</h1>
-        <div class="loader"><div class="progress" id="bar"></div></div>
-        <p id="boot-text" style="font-family: monospace; color: #555; margin-top: 10px;">Initializing System...</p>
+        <div class="logo-box">
+            <h1 class="logo-title">HATIM SPACE</h1>
+            <div class="dev-credit">BY HATIM AIT AGGOU</div>
+        </div>
+        <div class="loader-wrap"><div class="bar" id="bar"></div></div>
     </div>
 
     <div id="app">
-        <div class="top-nav">
-            <span style="color:var(--primary)">⚡ iHatimOS v4.0</span>
-            <div id="clock">00:00:00</div>
-        </div>
+        <header>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="background:var(--primary); width:12px; height:12px; border-radius:50%;"></span>
+                <b style="letter-spacing:1px;">HATIM SPACE</b>
+            </div>
+            <div id="clock" style="font-family:monospace; color:#444;">00:00:00</div>
+        </header>
 
-        <div class="editor-container">
+        <div class="editor-zone">
             <div id="editor" contenteditable="true"></div>
             
             <div id="slash-menu">
-                <div class="slash-item" onclick="executeCommand('download')"><span>💾</span> تحميل كملف (Text)</div>
-                <div class="slash-item" onclick="executeCommand('clear')"><span>🗑️</span> مسح المفكرة</div>
-                <div class="slash-item" onclick="executeCommand('time')"><span>🕒</span> إضافة الوقت الحالي</div>
-                <div class="slash-item" onclick="executeCommand('rating')"><span>⭐</span> تقييم النظام</div>
-                <div class="slash-item" onclick="executeCommand('chat')"><span>💬</span> مراسلة حاتم</div>
+                <div class="slash-item" onclick="exec('save')"><b>💾</b> حفظ وتحميل الملف (.txt)</div>
+                <div class="slash-item" onclick="exec('clear')"><span>🗑️</span> مسح كل المحتوى</div>
+                <div class="slash-item" onclick="exec('time')"><span>🕒</span> إدراج الوقت الحالي</div>
+                <div class="slash-item" onclick="exec('rate')"><span>⭐</span> تقييم المطور حاتم</div>
             </div>
         </div>
+
+        <footer>
+            جميع الحقوق محفوظة &copy; 2026 | صنع بواسطة المبرمج <span class="highlight">حاتم ايت اجو</span>
+        </footer>
     </div>
 
-    <div id="toast"></div>
-
     <script>
-        const GETFORM_URL = "https://getform.io/f/bllgzwlb";
+        const GETFORM = "https://getform.io/f/bllgzwlb";
         const editor = document.getElementById('editor');
-        const slashMenu = document.getElementById('slash-menu');
+        const menu = document.getElementById('slash-menu');
 
-        // 1. شاشة الإقلاع
+        // 1. نظام الإقلاع
         window.onload = () => {
             let p = 0;
-            const interval = setInterval(() => {
+            const boot = setInterval(() => {
                 p += Math.random() * 20;
                 document.getElementById('bar').style.width = p + "%";
                 if(p >= 100) {
-                    clearInterval(interval);
-                    document.getElementById('splash').style.opacity = '0';
+                    clearInterval(boot);
                     setTimeout(() => {
-                        document.getElementById('splash').style.display = 'none';
-                        document.getElementById('app').style.opacity = '1';
-                        if(localStorage.getItem('hatim_content')) editor.innerHTML = localStorage.getItem('hatim_content');
-                    }, 800);
+                        document.getElementById('splash').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('splash').style.display = 'none';
+                            document.getElementById('app').style.opacity = '1';
+                            if(localStorage.getItem('hatim_space_save')) editor.innerHTML = localStorage.getItem('hatim_space_save');
+                        }, 1000);
+                    }, 400);
                 }
-            }, 150);
+            }, 120);
         };
 
-        // 2. ساعة النظام
+        // 2. الساعة
         setInterval(() => {
             document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-MA');
         }, 1000);
 
-        // 3. منطق قائمة السلاش (Slash Command Logic)
+        // 3. تفعيل السلاش (Slash System)
         editor.addEventListener('keyup', (e) => {
-            const selection = window.getSelection();
-            const range = selection.getRangeAt(0);
-            const textBeforeCursor = range.startContainer.textContent.substring(0, range.startOffset);
-
-            if (textBeforeCursor.endsWith('/')) {
-                const rect = range.getBoundingClientRect();
-                slashMenu.style.display = 'block';
-                slashMenu.style.top = (rect.bottom + window.scrollY) + 'px';
-                slashMenu.style.left = rect.left + 'px';
-            } else {
-                slashMenu.style.display = 'none';
+            const sel = window.getSelection();
+            if (sel.rangeCount > 0) {
+                const range = sel.getRangeAt(0);
+                const text = range.startContainer.textContent.substring(0, range.startOffset);
+                if (text.endsWith('/')) {
+                    const rect = range.getBoundingClientRect();
+                    menu.style.display = 'block';
+                    menu.style.top = (rect.bottom + window.scrollY) + 'px';
+                    menu.style.left = rect.left + 'px';
+                } else {
+                    menu.style.display = 'none';
+                }
             }
         });
 
         // 4. تنفيذ الأوامر
-        function executeCommand(cmd) {
-            // مسح علامة / من النص
+        function exec(cmd) {
             editor.innerHTML = editor.innerHTML.replace('/', '');
-            slashMenu.style.display = 'none';
+            menu.style.display = 'none';
 
-            if (cmd === 'download') {
+            if (cmd === 'save') {
                 const blob = new Blob([editor.innerText], {type: "text/plain"});
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = "HatimOS_Notes.txt";
+                a.download = "Hatim_Space_Work.txt";
                 a.click();
-                showToast("جاري التحميل...");
             } 
             else if (cmd === 'clear') {
-                if(confirm("هل تريد مسح كل شيء؟")) editor.innerHTML = "";
+                if(confirm("هل تريد إفراغ المساحة؟")) editor.innerHTML = "";
             }
             else if (cmd === 'time') {
-                editor.innerHTML += " [" + new Date().toLocaleTimeString() + "] ";
+                editor.innerHTML += ` [${new Date().toLocaleTimeString()}] `;
             }
-            else if (cmd === 'rating') {
-                let r = prompt("قيم من 5:");
-                if(r) {
-                    fetch(GETFORM_URL, { method: 'POST', body: JSON.stringify({t: 'Rating', v: r}) });
-                    showToast("شكراً لتقييمك!");
-                }
-            }
-            else if (cmd === 'chat') {
-                let msg = prompt("اكتب رسالتك للمطور:");
-                if(msg) {
-                    fetch(GETFORM_URL, { method: 'POST', body: JSON.stringify({t: 'Message', v: msg}) });
-                    showToast("تم إرسال رسالتك!");
-                }
+            else if (cmd === 'rate') {
+                let r = prompt("قيم عمل المبرمج حاتم ايت اجو من 5:");
+                if(r) fetch(GETFORM, { method: 'POST', body: JSON.stringify({Dev: 'Hatim Ait Aggou', Rating: r}) });
             }
         }
 
         // 5. الحفظ التلقائي
         editor.addEventListener('input', () => {
-            localStorage.setItem('hatim_content', editor.innerHTML);
+            localStorage.setItem('hatim_space_save', editor.innerHTML);
         });
 
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.display = 'block';
-            setTimeout(() =>
+        // إغلاق القائمة عند النقر خارجاً
+        document.addEventListener('click', (e) => {
+            if (e.target.id !== 'editor') menu.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
