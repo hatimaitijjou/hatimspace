@@ -3,237 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iHatimOS | نظام حاتم المتطور</title>
+    <title>iHatimOS | Notion Style</title>
     <style>
-        /* تحسينات بصرية: خلفية متحركة */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        :root { --primary: #00ff41; --bg: #0d0d0d; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; overflow: hidden; height: 100vh; }
+
+        /* شاشة البداية */
+        #splash {
+            position: fixed; inset: 0; background: black; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.8s;
         }
+        .loader { width: 200px; height: 3px; background: #222; margin-top: 20px; border-radius: 10px; overflow: hidden; }
+        .progress { width: 0%; height: 100%; background: var(--primary); transition: 0.3s; }
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(-45deg, #000000, #0a1f0a, #000000, #163216);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #e0e0e0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+        /* الواجهة الرئيسية */
+        #app { opacity: 0; transition: 1s; height: 100vh; display: flex; flex-direction: column; }
+        .top-nav { padding: 10px 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; background: #111; }
+
+        .editor-container { flex: 1; padding: 40px; overflow-y: auto; position: relative; display: flex; justify-content: center; }
+        #editor { 
+            width: 100%; max-width: 800px; outline: none; font-size: 1.2rem; 
+            line-height: 1.6; color: #efefef; min-height: 500px;
         }
+        #editor:empty:before { content: "اكتب / للأوامر أو ابدأ الكتابة..."; color: #555; }
 
-        /* الساعة الرقمية المضيئة */
-        .header {
-            width: 100%;
-            padding: 20px 0;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #00ff0033;
-            margin-bottom: 20px;
+        /* قائمة السلاش (Notion Style) */
+        #slash-menu {
+            position: absolute; background: #1a1a1a; border: 1px solid #333;
+            border-radius: 8px; width: 220px; display: none; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 5px;
         }
-
-        #clock {
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: #00ff00;
-            text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff0055;
-            letter-spacing: 5px;
+        .slash-item {
+            padding: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+            border-radius: 5px; transition: 0.2s; font-size: 0.9rem;
         }
+        .slash-item:hover { background: var(--primary); color: black; }
+        .slash-item span { font-size: 1.2rem; }
 
-        /* تخطيط النظام */
-        .container {
-            display: grid;
-            grid-template-columns: 250px 1fr 300px;
-            gap: 20px;
-            width: 95%;
-            max-width: 1400px;
-            height: 75vh;
+        /* التنبيهات */
+        #toast {
+            position: fixed; bottom: 20px; right: 20px; background: var(--primary);
+            color: black; padding: 10px 20px; border-radius: 5px; display: none; font-weight: bold;
         }
-
-        /* القائمة الجانبية */
-        .sidebar {
-            background: rgba(20, 20, 20, 0.8);
-            border: 1px solid #333;
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .sidebar h2 { color: #00ff00; font-size: 1.2rem; margin-bottom: 20px; text-align: center; }
-
-        .btn {
-            background: #222;
-            color: white;
-            border: 1px solid #444;
-            padding: 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: right;
-            font-size: 1rem;
-        }
-
-        .btn:hover {
-            background: #00ff00;
-            color: black;
-            box-shadow: 0 0 15px #00ff00;
-            transform: scale(1.05);
-        }
-
-        /* منطقة العمل الرئيسية (البيضاء للهوية الاحترافية) */
-        .main-editor {
-            background: #ffffff;
-            color: #222;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            overflow-y: auto;
-            position: relative;
-        }
-
-        #editor-title { color: #111; border-bottom: 2px solid #00ff00; padding-bottom: 10px; }
-
-        .content-area {
-            margin-top: 20px;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            outline: none;
-            min-height: 80%;
-        }
-
-        /* لوحة الدردشة التفاعلية */
-        .chat-panel {
-            background: rgba(10, 10, 10, 0.9);
-            border: 1px solid #00ff0055;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-
-        .msg-system { color: #888; font-style: italic; margin-bottom: 10px; }
-        .msg-user { color: #00ff00; margin-bottom: 8px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-
-        #chat-input {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: white;
-            padding: 12px;
-            border-radius: 10px;
-            outline: none;
-        }
-
-        #chat-input:focus { border-color: #00ff00; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div id="clock">00:00:00</div>
+    <div id="splash">
+        <h1 style="color:var(--primary); text-shadow: 0 0 15px var(--primary);">iHatimOS</h1>
+        <div class="loader"><div class="progress" id="bar"></div></div>
+        <p id="boot-text" style="font-family: monospace; color: #555; margin-top: 10px;">Initializing System...</p>
     </div>
 
-    <div class="container">
-        <div class="sidebar">
-            <h2>iHatimOS v2.0</h2>
-            <button class="btn" onclick="openPage('مفكرة حاتم')">📝 المفكرة</button>
-            <button class="btn" onclick="openPage('قائمة المهام')">✅ المهام</button>
-            <button class="btn" onclick="openPage('مخطط المشاريع')">🚀 المشاريع</button>
-            <div style="flex:1"></div>
-            <button class="btn" onclick="sendRating()" style="border-color:#ffcc00; color:#ffcc00">⭐ تقييم النظام</button>
-            <button class="btn" onclick="saveData()">💾 حفظ التغييرات</button>
+    <div id="app">
+        <div class="top-nav">
+            <span style="color:var(--primary)">⚡ iHatimOS v4.0</span>
+            <div id="clock">00:00:00</div>
         </div>
 
-        <div class="main-editor">
-            <h2 id="editor-title">مفكرة حاتم</h2>
-            <div class="content-area" id="content" contenteditable="true">
-                أهلاً بك في نظامك الخاص... ابدأ الإبداع هنا.
+        <div class="editor-container">
+            <div id="editor" contenteditable="true"></div>
+            
+            <div id="slash-menu">
+                <div class="slash-item" onclick="executeCommand('download')"><span>💾</span> تحميل كملف (Text)</div>
+                <div class="slash-item" onclick="executeCommand('clear')"><span>🗑️</span> مسح المفكرة</div>
+                <div class="slash-item" onclick="executeCommand('time')"><span>🕒</span> إضافة الوقت الحالي</div>
+                <div class="slash-item" onclick="executeCommand('rating')"><span>⭐</span> تقييم النظام</div>
+                <div class="slash-item" onclick="executeCommand('chat')"><span>💬</span> مراسلة حاتم</div>
             </div>
-        </div>
-
-        <div class="chat-panel">
-            <h3 style="color:#00ff00; margin-top:0;">تواصل مع المطور 💬</h3>
-            <div class="chat-messages" id="chat-box">
-                <div class="msg-system">نظام: أي رسالة تكتبها هنا ستصل لحاتم على بريد Gmail الخاص به فوراً.</div>
-            </div>
-            <input type="text" id="chat-input" placeholder="اكتب رسالتك هنا..." onkeypress="checkEnter(event)">
         </div>
     </div>
+
+    <div id="toast"></div>
 
     <script>
-        // الرابط الخاص بك الذي حصلت عليه من Getform
         const GETFORM_URL = "https://getform.io/f/bllgzwlb";
+        const editor = document.getElementById('editor');
+        const slashMenu = document.getElementById('slash-menu');
 
-        // تحديث الساعة
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('ar-MA', {hour12: false});
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+        // 1. شاشة الإقلاع
+        window.onload = () => {
+            let p = 0;
+            const interval = setInterval(() => {
+                p += Math.random() * 20;
+                document.getElementById('bar').style.width = p + "%";
+                if(p >= 100) {
+                    clearInterval(interval);
+                    document.getElementById('splash').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('splash').style.display = 'none';
+                        document.getElementById('app').style.opacity = '1';
+                        if(localStorage.getItem('hatim_content')) editor.innerHTML = localStorage.getItem('hatim_content');
+                    }, 800);
+                }
+            }, 150);
+        };
 
-        // وظيفة الإرسال لـ Gmail عبر Getform
-        async function notifyHatim(type, text) {
-            try {
-                await fetch(GETFORM_URL, {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ "النوع": type, "المحتوى": text, "الوقت": new Date().toLocaleString() })
-                });
-                console.log("تم الإرسال!");
-            } catch (err) {
-                console.error("خطأ في الاتصال");
+        // 2. ساعة النظام
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-MA');
+        }, 1000);
+
+        // 3. منطق قائمة السلاش (Slash Command Logic)
+        editor.addEventListener('keyup', (e) => {
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const textBeforeCursor = range.startContainer.textContent.substring(0, range.startOffset);
+
+            if (textBeforeCursor.endsWith('/')) {
+                const rect = range.getBoundingClientRect();
+                slashMenu.style.display = 'block';
+                slashMenu.style.top = (rect.bottom + window.scrollY) + 'px';
+                slashMenu.style.left = rect.left + 'px';
+            } else {
+                slashMenu.style.display = 'none';
+            }
+        });
+
+        // 4. تنفيذ الأوامر
+        function executeCommand(cmd) {
+            // مسح علامة / من النص
+            editor.innerHTML = editor.innerHTML.replace('/', '');
+            slashMenu.style.display = 'none';
+
+            if (cmd === 'download') {
+                const blob = new Blob([editor.innerText], {type: "text/plain"});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = "HatimOS_Notes.txt";
+                a.click();
+                showToast("جاري التحميل...");
+            } 
+            else if (cmd === 'clear') {
+                if(confirm("هل تريد مسح كل شيء؟")) editor.innerHTML = "";
+            }
+            else if (cmd === 'time') {
+                editor.innerHTML += " [" + new Date().toLocaleTimeString() + "] ";
+            }
+            else if (cmd === 'rating') {
+                let r = prompt("قيم من 5:");
+                if(r) {
+                    fetch(GETFORM_URL, { method: 'POST', body: JSON.stringify({t: 'Rating', v: r}) });
+                    showToast("شكراً لتقييمك!");
+                }
+            }
+            else if (cmd === 'chat') {
+                let msg = prompt("اكتب رسالتك للمطور:");
+                if(msg) {
+                    fetch(GETFORM_URL, { method: 'POST', body: JSON.stringify({t: 'Message', v: msg}) });
+                    showToast("تم إرسال رسالتك!");
+                }
             }
         }
 
-        // إرسال التقييم
-        function sendRating() {
-            let rating = prompt("قيم نظام حاتم من 5 نجوم:");
-            if (rating) {
-                notifyHatim("⭐ تقييم جديد", `المستخدم قيم النظام بـ ${rating} نجوم`);
-                alert("شكراً لك! وصل تقييمك لحاتم بنجاح ✅");
-            }
-        }
+        // 5. الحفظ التلقائي
+        editor.addEventListener('input', () => {
+            localStorage.setItem('hatim_content', editor.innerHTML);
+        });
 
-        // معالجة الدردشة
-        function checkEnter(e) {
-            if (e.key === 'Enter' && e.target.value !== '') {
-                let msg = e.target.value;
-                let chatBox = document.getElementById('chat-box');
-                
-                // إضافة الرسالة للشاشة
-                chatBox.innerHTML += `<div class="msg-user"><b>أنت:</b> ${msg}</div>`;
-                
-                // إرسال الرسالة لـ Gmail
-                notifyHatim("💬 رسالة دردشة", msg);
-                
-                e.target.value = '';
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        }
-
-        function openPage(name) {
-            document.getElementById('editor-title').innerText = name;
-        }
-
-        function saveData() {
-            alert("تم حفظ البيانات محلياً وفي السحابة 💾");
-        }
-    </script>
-</body>
-</html>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() =>
