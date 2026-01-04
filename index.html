@@ -14,32 +14,24 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .logo-box { text-align: center; animation: fadeIn 1.5s ease; }
+        .logo-box { text-align: center; }
         .logo-title { font-size: 3.5rem; color: var(--primary); text-shadow: 0 0 25px var(--primary); margin: 0; }
         .dev-credit { color: #555; font-family: monospace; letter-spacing: 2px; margin-top: 5px; }
-        
         .loader-wrap { width: 200px; height: 2px; background: #111; margin-top: 30px; border-radius: 10px; overflow: hidden; }
         .bar { width: 0%; height: 100%; background: var(--primary); transition: 0.3s; box-shadow: 0 0 10px var(--primary); }
 
         /* الواجهة الرئيسية */
         #app { opacity: 0; transition: 1.2s; height: 100vh; display: flex; flex-direction: column; }
-        
-        header { 
-            padding: 15px 30px; background: #0a0a0a; border-bottom: 1px solid #1a1a1a;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        header { padding: 15px 30px; background: #0a0a0a; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
 
         .editor-zone { flex: 1; padding: 50px 20px; overflow-y: auto; display: flex; justify-content: center; position: relative; }
-        #editor { 
-            width: 100%; max-width: 800px; outline: none; font-size: 1.3rem; 
-            line-height: 1.8; color: #e0e0e0; min-height: 60vh;
-        }
-        #editor:empty:before { content: "اكتب / للأوامر السريعة..."; color: #333; }
+        #editor { width: 100%; max-width: 800px; outline: none; font-size: 1.3rem; line-height: 1.8; color: #e0e0e0; min-height: 60vh; }
+        #editor:empty:before { content: "اكتب / للأوامر (حفظ، تحميل، مسح)..."; color: #333; }
 
-        /* قائمة السلاش (Notion Style) */
+        /* قائمة السلاش (Slash Menu) */
         #slash-menu {
             position: absolute; background: var(--glass); border: 1px solid #222;
-            border-radius: 10px; width: 250px; display: none; z-index: 1000;
+            border-radius: 10px; width: 260px; display: none; z-index: 1000;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8); padding: 6px; backdrop-filter: blur(15px);
         }
         .slash-item {
@@ -47,17 +39,10 @@
             border-radius: 6px; transition: 0.2s; font-size: 0.9rem; color: #ccc;
         }
         .slash-item:hover { background: var(--primary); color: black; font-weight: bold; }
-        .slash-item b { font-size: 1.2rem; }
 
-        /* تذييل الصفحة (Footer) */
-        footer {
-            padding: 12px; text-align: center; background: #080808; border-top: 1px solid #111;
-            font-size: 0.8rem; color: #444; letter-spacing: 0.5px;
-        }
-        .highlight { color: var(--primary); opacity: 0.8; }
-
-        /* أنيميشن */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* تذييل الصفحة */
+        footer { padding: 12px; text-align: center; background: #080808; border-top: 1px solid #111; font-size: 0.8rem; color: #444; }
+        .highlight { color: var(--primary); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -83,10 +68,10 @@
             <div id="editor" contenteditable="true"></div>
             
             <div id="slash-menu">
-                <div class="slash-item" onclick="exec('save')"><b>💾</b> حفظ وتحميل الملف (.txt)</div>
-                <div class="slash-item" onclick="exec('clear')"><span>🗑️</span> مسح كل المحتوى</div>
-                <div class="slash-item" onclick="exec('time')"><span>🕒</span> إدراج الوقت الحالي</div>
-                <div class="slash-item" onclick="exec('rate')"><span>⭐</span> تقييم المطور حاتم</div>
+                <div class="slash-item" onclick="exec('download')"><b>📥</b> تحميل ملف (Download File)</div>
+                <div class="slash-item" onclick="exec('save')"><b>💾</b> حفظ سريع في المتصفح</div>
+                <div class="slash-item" onclick="exec('clear')"><b>🗑️</b> مسح كل المحتوى</div>
+                <div class="slash-item" onclick="exec('rate')"><b>⭐</b> تقييم المبرمج حاتم</div>
             </div>
         </div>
 
@@ -100,11 +85,11 @@
         const editor = document.getElementById('editor');
         const menu = document.getElementById('slash-menu');
 
-        // 1. نظام الإقلاع
+        // 1. نظام الإقلاع (Splash)
         window.onload = () => {
             let p = 0;
             const boot = setInterval(() => {
-                p += Math.random() * 20;
+                p += Math.random() * 25;
                 document.getElementById('bar').style.width = p + "%";
                 if(p >= 100) {
                     clearInterval(boot);
@@ -117,7 +102,7 @@
                         }, 1000);
                     }, 400);
                 }
-            }, 120);
+            }, 100);
         };
 
         // 2. الساعة
@@ -125,7 +110,7 @@
             document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-MA');
         }, 1000);
 
-        // 3. تفعيل السلاش (Slash System)
+        // 3. تفعيل السلاش (Slash Command)
         editor.addEventListener('keyup', (e) => {
             const sel = window.getSelection();
             if (sel.rangeCount > 0) {
@@ -142,23 +127,27 @@
             }
         });
 
-        // 4. تنفيذ الأوامر
+        // 4. تنفيذ الأوامر (Command Executor)
         function exec(cmd) {
-            editor.innerHTML = editor.innerHTML.replace('/', '');
+            editor.innerHTML = editor.innerHTML.replace('/', ''); // مسح السلاش
             menu.style.display = 'none';
 
-            if (cmd === 'save') {
-                const blob = new Blob([editor.innerText], {type: "text/plain"});
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = "Hatim_Space_Work.txt";
-                a.click();
+            if (cmd === 'download') {
+                // استخراج النص فقط من المحرر
+                const textContent = editor.innerText || editor.textContent;
+                const blob = new Blob([textContent], {type: "text/plain;charset=utf-8"});
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "Hatim_Space_Note.txt";
+                link.click();
+                URL.revokeObjectURL(link.href);
             } 
-            else if (cmd === 'clear') {
-                if(confirm("هل تريد إفراغ المساحة؟")) editor.innerHTML = "";
+            else if (cmd === 'save') {
+                localStorage.setItem('hatim_space_save', editor.innerHTML);
+                alert("تم الحفظ في ذاكرة المتصفح بنجاح! ✅");
             }
-            else if (cmd === 'time') {
-                editor.innerHTML += ` [${new Date().toLocaleTimeString()}] `;
+            else if (cmd === 'clear') {
+                if(confirm("هل تريد إفراغ المساحة نهائياً؟")) editor.innerHTML = "";
             }
             else if (cmd === 'rate') {
                 let r = prompt("قيم عمل المبرمج حاتم ايت اجو من 5:");
@@ -166,7 +155,7 @@
             }
         }
 
-        // 5. الحفظ التلقائي
+        // 5. الحفظ التلقائي عند الكتابة
         editor.addEventListener('input', () => {
             localStorage.setItem('hatim_space_save', editor.innerHTML);
         });
