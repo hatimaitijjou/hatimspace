@@ -2,137 +2,192 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>HATIM SPACE OS | the beste</title>
+<title>HATIM SPACE OS | Ultimate 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root {
-    --primary:#00ff41;
-    --secondary:#00d4ff;
-    --bg:#050505;
-    --panel:#111;
-    --text:#eee;
-    --glass:rgba(255,255,255,0.05);
+:root{
+  --primary:#00ff41;
+  --secondary:#00d4ff;
+  --bg:#050505;
+  --panel:#111;
+  --text:#eee;
+  --glass:rgba(255,255,255,0.05);
 }
-* { box-sizing:border-box; font-family:'Cairo',sans-serif; }
-body,html { margin:0; padding:0; height:100vh; overflow:hidden; color:var(--text); }
-#stars { position:fixed; inset:0; background:#000; z-index:-1; overflow:hidden; }
+*{box-sizing:border-box;font-family:'Cairo',sans-serif;}
+body,html{margin:0;padding:0;height:100vh;overflow:hidden;color:var(--text);background:var(--bg);}
+
+/* نجوم */
+#stars{position:fixed;inset:0;z-index:-1;background:#000;overflow:hidden;}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle 5s infinite;}
+@keyframes twinkle{0%,100%{opacity:0.3;}50%{opacity:1;}}
 
 /* Login */
-#login-screen { position:fixed; inset:0; z-index:9999; display:flex; justify-content:center; align-items:center; }
-.login-card { background: var(--glass); backdrop-filter:blur(25px); padding:60px; border-radius:40px; border:1px solid rgba(0,255,65,0.2); width:450px; text-align:center; box-shadow:0 0 80px rgba(0,255,65,0.2); }
-.dev-badge { color: var(--primary); font-weight:bold; letter-spacing:2px; margin-bottom:20px; display:block; }
-.main-logo { font-size:3.5rem; font-weight:900; background: linear-gradient(45deg,var(--primary),var(--secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:30px; }
-.login-card input { width:100%; padding:15px; margin-bottom:20px; background:#000; border:1px solid #333; color:white; border-radius:12px; transition:0.3s; }
-.login-card input:focus { border-color: var(--primary); outline:none; }
-.login-card button { width:100%; padding:18px; font-weight:900; color:black; background:var(--primary); border:none; border-radius:12px; cursor:pointer; transition:0.3s, transform 0.2s; }
-.login-card button:hover { background: var(--secondary); transform:scale(1.05); }
+#login-screen{position:fixed;inset:0;z-index:9999;display:flex;justify-content:center;align-items:center;}
+.login-card{background:var(--glass);backdrop-filter:blur(25px);padding:60px;border-radius:40px;border:1px solid rgba(0,255,65,0.2);width:450px;text-align:center;box-shadow:0 0 100px rgba(0,255,65,0.2);}
+.dev-badge{color:var(--primary);font-weight:bold;letter-spacing:2px;margin-bottom:20px;display:block;}
+.main-logo{font-size:3.5rem;font-weight:900;background:linear-gradient(45deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:30px;}
+.login-card input{width:100%;padding:15px;margin-bottom:20px;background:#000;border:1px solid #333;color:white;border-radius:12px;transition:0.3s;}
+.login-card input:focus{border-color:var(--primary);outline:none;}
+.login-card button{width:100%;padding:18px;font-weight:900;color:black;background:var(--primary);border:none;border-radius:12px;cursor:pointer;transition:0.3s, transform 0.2s;}
+.login-card button:hover{background:var(--secondary);transform:scale(1.05);}
 
 /* App Interface */
-#app-interface { display:none; flex-direction:column; height:100vh; }
-.top-bar { background:var(--panel); padding:10px 25px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #222; }
-.top-bar .btn { margin-right:5px; transition:0.3s; }
-.top-bar .btn:hover { background:var(--primary); color:black; transform:scale(1.05); font-weight:bold; }
-.workspace { display:flex; flex:1; overflow:hidden; position:relative; }
-.editor-side { flex:1; padding:40px; background:rgba(0,0,0,0.7); overflow-y:auto; position:relative; }
-#paper { width:100%; max-width:900px; min-height:1100px; margin:auto; padding:60px; border-radius:12px; background: rgba(255,255,255,0.95); box-shadow: inset 0 0 20px rgba(0,0,0,0.4); color:#111; font-size:18px; line-height:1.8; outline:none; transition:0.3s; }
-#paper:focus { box-shadow:0 0 40px var(--primary); }
-#slash-menu { position:absolute; width:260px; background:#111; border:1px solid var(--primary); border-radius:15px; padding:12px; display:none; z-index:1000; }
-.s-item { padding:12px; cursor:pointer; border-radius:10px; transition:0.2s; display:flex; align-items:center; gap:10px; font-size:14px; }
-.s-item:hover { background: var(--primary); color:black; font-weight:bold; transform:scale(1.02); }
-.ai-chat-side { width:350px; background: var(--panel); border-right:1px solid #222; display:flex; flex-direction:column; }
-.ai-chat-side header { padding:15px; font-weight:bold; color:var(--primary); border-bottom:1px solid #222; }
-#chat-flow { flex:1; padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; }
-.bubble { padding:12px; border-radius:12px; max-width:85%; font-size:14px; line-height:1.5; opacity:0; animation:fadeMsg 0.5s forwards; }
-.bubble.user { background:#333; align-self:flex-end; color:white; }
-.bubble.ai { background:var(--primary); color:black; align-self:flex-start; font-weight:bold; text-shadow:0 0 5px white; }
-.ai-chat-side input { width:100%; padding:12px; background:#000; border:1px solid #333; border-radius:8px; color:white; transition:0.3s; }
-.ai-chat-side input:focus { border-color:var(--primary); outline:none; }
-.signature-footer { position:fixed; bottom:10px; left:20px; font-size:12px; color:#666; }
-.signature-footer span { color: var(--primary); font-weight:bold; }
-@keyframes fadeMsg { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+#app-interface{display:none;flex-direction:column;height:100vh;}
+.top-bar{background:var(--panel);padding:10px 25px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #222;flex-wrap:wrap;gap:5px;}
+.top-bar .btn{margin-right:5px;transition:0.3s, box-shadow 0.3s;}
+.top-bar .btn:hover{background:var(--primary);color:black;transform:scale(1.05);font-weight:bold;box-shadow:0 0 20px var(--primary);}
+.workspace{display:flex;flex:1;overflow:hidden;position:relative;}
+.editor-side{flex:1;padding:40px;background:rgba(0,0,0,0.7);overflow-y:auto;position:relative;}
+#paper{width:100%;max-width:900px;min-height:1100px;margin:auto;padding:60px;border-radius:12px;background: rgba(255,255,255,0.95);box-shadow: inset 0 0 20px rgba(0,0,0,0.4);color:#111;font-size:18px;line-height:1.8;outline:none;transition:0.3s;}
+#paper:focus{box-shadow:0 0 40px var(--primary);}
+#slash-menu{position:absolute;width:260px;background:#111;border:1px solid var(--primary);border-radius:15px;padding:12px;display:none;z-index:1000;}
+.s-item{padding:12px;cursor:pointer;border-radius:10px;transition:0.2s;display:flex;align-items:center;gap:10px;font-size:14px;}
+.s-item:hover{background:var(--primary);color:black;font-weight:bold;transform:scale(1.02);}
+
+/* AI Chat */
+.ai-chat-side{width:350px;background:var(--panel);border-right:1px solid #222;display:flex;flex-direction:column;}
+.ai-chat-side header{padding:15px;font-weight:bold;color:var(--primary);border-bottom:1px solid #222;}
+#chat-flow{flex:1;padding:20px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;}
+.bubble{padding:12px;border-radius:12px;max-width:85%;font-size:14px;line-height:1.5;opacity:0;animation:fadeMsg 0.5s forwards;}
+.bubble.user{background:#333;align-self:flex-end;color:white;}
+.bubble.ai{background:var(--primary);color:black;align-self:flex-start;font-weight:bold;text-shadow:0 0 5px white;}
+.ai-chat-side input{width:100%;padding:12px;background:#000;border:1px solid #333;border-radius:8px;color:white;transition:0.3s;}
+.ai-chat-side input:focus{border-color:var(--primary);outline:none;}
+.signature-footer{position:fixed;bottom:10px;left:20px;font-size:12px;color:#666;}
+.signature-footer span{color:var(--primary);font-weight:bold;}
+@keyframes fadeMsg{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
 <div id="stars"></div>
+
+<!-- Login -->
 <div id="login-screen">
-    <div class="login-card">
-        <span class="dev-badge">برمج من طرف حاتم آيت أجو</span>
-        <div class="main-logo">HATIM SPACE</div>
-        <input type="text" id="captain-name" placeholder="اسم القائد...">
-        <button onclick="launchOS()">تشغيل النظام الأسطوري 🚀</button>
-    </div>
+<div class="login-card">
+<span class="dev-badge">برمج من طرف حاتم آيت أجو</span>
+<div class="main-logo">HATIM SPACE</div>
+<input type="text" id="captain-name" placeholder="اسم القائد...">
+<button onclick="playSound('click');launchOS()">تشغيل النظام الأسطوري 🚀</button>
 </div>
+</div>
+
+<!-- App Interface -->
 <div id="app-interface">
-    <header class="top-bar">
-        <div style="font-weight:900; color:var(--primary);">HATIM SPACE OS | Office + Notion</div>
-        <div>
-            <button class="btn" onclick="document.execCommand('bold')">B</button>
-            <button class="btn" onclick="insTable()">📊 جدول</button>
-            <button class="btn" onclick="insSlide()">🖼️ شريحة</button>
-            <button class="btn" onclick="insToggle()">🗂️ Toggle List (Notion)</button>
-            <button class="btn" onclick="changeBG()">🌌 تغيير الخلفية</button>
-            <button class="btn" onclick="uploadBG()">🖼️ رفع خلفية</button>
-        </div>
-        <div style="color:#888; font-size:12px;">المبرمج: <span style="color:white;">حاتم آيت أجو</span></div>
-    </header>
-    <div class="workspace">
-        <div class="ai-chat-side">
-            <header>🤖 HATIM AI ENGINE</header>
-            <div id="chat-flow"></div>
-            <div style="padding:15px;"><input type="text" id="ai-in" placeholder="دردش مع الذكاء..." onkeypress="if(event.key==='Enter') aiChat()"></div>
-        </div>
-        <div class="editor-side">
-            <div id="paper" contenteditable="true" spellcheck="false">
-                <h1 style="text-align:center;">إبداع جديد بقلم حاتم ✍️</h1>
-                <p>اكتب <b>/</b> لتشغيل ذكاء حاتم البرمجي أو أدوات Notion الذكية...</p>
-            </div>
-            <div id="slash-menu">
-                <div class="s-item" onclick="aiWrite('story')">📖 تأليف قصة أسطورية</div>
-                <div class="s-item" onclick="aiWrite('code')">💻 إنشاء كود برمجى</div>
-                <div class="s-item" onclick="insTable()">📊 إدراج جدول بيانات</div>
-                <div class="s-item" onclick="insToggle()">🗂️ Toggle List (Notion)</div>
-            </div>
-        </div>
-    </div>
+<header class="top-bar">
+<div style="font-weight:900;color:var(--primary);">HATIM SPACE OS | Ultimate</div>
+<div>
+<button class="btn" onclick="playSound('click');execCmd('bold')">B</button>
+<button class="btn" onclick="playSound('click');insTable()">📊 جدول</button>
+<button class="btn" onclick="playSound('click');insSlide()">🖼️ شريحة</button>
+<button class="btn" onclick="playSound('click');insToggle()">🗂️ Toggle List</button>
+<button class="btn" onclick="playSound('click');changeBG()">🌌 تغيير الخلفية</button>
+<button class="btn" onclick="playSound('click');uploadBG()">🖼️ رفع خلفية</button>
+<button class="btn" onclick="playSound('click');textColor()">🎨 لون النص</button>
 </div>
+<div style="color:#888;font-size:12px;">المبرمج: <span style="color:white;">حاتم آيت أجو</span></div>
+</header>
+
+<div class="workspace">
+<div class="ai-chat-side">
+<header>🤖 HATIM AI ENGINE</header>
+<div id="chat-flow"></div>
+<div style="padding:15px;">
+<input type="text" id="ai-in" placeholder="دردش مع الذكاء..." onkeypress="if(event.key==='Enter'){playSound('msg');aiChat();}">
+</div>
+</div>
+<div class="editor-side">
+<div id="paper" contenteditable="true" spellcheck="false">
+<h1 style="text-align:center;">إبداع جديد بقلم حاتم ✍️</h1>
+<p>اكتب <b>/</b> لتشغيل ذكاء حاتم البرمجي أو أدوات Notion الذكية...</p>
+</div>
+<div id="slash-menu">
+<div class="s-item" onclick="playSound('click');aiWrite('story')">📖 تأليف قصة أسطورية</div>
+<div class="s-item" onclick="playSound('click');aiWrite('code')">💻 إنشاء كود برمجى</div>
+<div class="s-item" onclick="playSound('click');insTable()">📊 إدراج جدول بيانات</div>
+<div class="s-item" onclick="playSound('click');insToggle()">🗂️ Toggle List</div>
+</div>
+</div>
+</div>
+</div>
+
 <div class="signature-footer">برمج من طرف <span>حاتم آيت أجو</span> | 2026</div>
+
 <script>
-function launchOS(){
-    const name=document.getElementById('captain-name').value.trim();
-    if(!name) return alert("يرجى إدخال اسمك!");
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app-interface').style.display='flex';
+// أصوات
+const sounds={
+  click:new Audio("https://www.soundjay.com/button/beep-07.wav"),
+  msg:new Audio("https://www.soundjay.com/button/beep-10.wav")
+};
+function playSound(name){if(sounds[name])sounds[name].play();}
+
+// نجوم متحركة
+for(let i=0;i<100;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  s.style.width=Math.random()*3+1+'px';
+  s.style.height=s.style.width;
+  s.style.top=Math.random()*100+'%';
+  s.style.left=Math.random()*100+'%';
+  document.getElementById('stars').appendChild(s);
 }
+
+// Launch OS
+function launchOS(){
+  const name=document.getElementById('captain-name').value.trim();
+  if(!name) return alert("يرجى إدخال اسمك!");
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-interface').style.display='flex';
+}
+
+// Editor & Slash Menu
 const paper=document.getElementById('paper');
 const sMenu=document.getElementById('slash-menu');
 paper.addEventListener('keyup',()=>{
-    const sel=window.getSelection();
-    if(sel.rangeCount>0 && sel.getRangeAt(0).startContainer.textContent.endsWith('/')){
-        const rect=sel.getRangeAt(0).getBoundingClientRect();
-        sMenu.style.display='block';
-        sMenu.style.top=(rect.bottom+window.scrollY+5)+'px';
-        sMenu.style.left=rect.left+'px';
-    } else sMenu.style.display='none';
+  const sel=window.getSelection();
+  if(sel.rangeCount>0 && sel.getRangeAt(0).startContainer.textContent.endsWith('/')){
+    const rect=sel.getRangeAt(0).getBoundingClientRect();
+    sMenu.style.display='block';
+    sMenu.style.top=(rect.bottom+window.scrollY+5)+'px';
+    sMenu.style.left=rect.left+'px';
+  } else sMenu.style.display='none';
 });
+
+// AI Chat
 function aiChat(){
-    const i=document.getElementById('ai-in');
-    const f=document.getElementById('chat-flow');
-    if(!i.value) return;
-    const u=document.createElement('div'); u.className='bubble user'; u.innerText=i.value; f.appendChild(u);
+  const i=document.getElementById('ai-in');
+  const f=document.getElementById('chat-flow');
+  if(!i.value) return;
+  const u=document.createElement('div'); u.className='bubble user'; u.innerText=i.value; f.appendChild(u);
+  f.scrollTop=f.scrollHeight;
+  setTimeout(()=>{
+    const a=document.createElement('div'); a.className='bubble ai';
+    const responses=["أهلاً بك يا قائد! ما الذي تريد أن نبدعه اليوم؟",
+                     "سأكتب لك قصة أسطورية بأسلوب حاتم!",
+                     "دعنا نبرمج شيئاً خرافياً الآن…"];
+    a.innerText=responses[Math.floor(Math.random()*responses.length)];
+    f.appendChild(a);
     f.scrollTop=f.scrollHeight;
-    setTimeout(()=>{ const a=document.createElement('div'); a.className='bubble ai'; a.innerText='بصفتي ذكاء حاتم، سأحلل طلبك فوراً!'; f.appendChild(a); f.scrollTop=f.scrollHeight; },700);
-    i.value='';
+    playSound('msg');
+  },700);
+  i.value='';
 }
+
+// Editor Commands
+function execCmd(cmd,val=null){ document.execCommand(cmd,false,val); }
 function aiWrite(t){
-    sMenu.style.display='none'; document.execCommand('delete');
-    const content=t==='story'?"في عالم يحكمه الكود، برز اسم حاتم كقائد للثورة التقنية...":"const hatimProject=()=>{console.log('Universal Success');}";
-    document.execCommand('insertHTML',`<span style="color:var(--primary)">${content}</span>`);
+  sMenu.style.display='none'; document.execCommand('delete');
+  const content=t==='story'?"في عالم يحكمه الكود، برز اسم حاتم كقائد للثورة التقنية...":"const hatimProject=()=>{console.log('Universal Success');}";
+  const span=document.createElement('span'); span.style.color='var(--primary)'; span.innerText=content;
+  paper.appendChild(span);
+  playSound('msg');
 }
-function insTable(){ sMenu.style.display='none'; document.execCommand('insertHTML',`<table border="1" style="width:100%; border-collapse:collapse;"><tr><td>بيانات</td><td>قيم</td></tr></table>`);}
-function insSlide(){ document.execCommand('insertHTML',`<div style="background:#111; color:white; padding:40px; border-radius:15px; text-align:center;"><h2>شريحة أسطورية</h2></div>`);}
-function insToggle(){ document.execCommand('insertHTML',`<div style="padding:15px; border-left:4px solid var(--primary); margin:10px 0;"><b>Toggle:</b> محتوى قابل للطي هنا...</div>`);}
-function changeBG(){ const colors=['#050505','#1b1b2f','#0a0a1a','#110022','#001122','#111111']; document.getElementById('stars').style.background=colors[Math.floor(Math.random()*colors.length)];}
-function uploadBG(){ const input=document.createElement('input'); input.type='file'; input.accept='image/*'; input.onchange=e=>{ const file=e.target.files[0]; const url=URL.createObjectURL(file); document.getElementById('stars').style.background=`url('${url}') center/cover no-repeat`;}; input.click();}
+function insTable(){ sMenu.style.display='none'; document.execCommand('insertHTML',`<table border="1" style="width:100%; border-collapse:collapse;"><tr><td>بيانات</td><td>قيم</td></tr></table>`); playSound('msg'); }
+function insSlide(){ document.execCommand('insertHTML',`<div style="background:#111;color:white;padding:40px;border-radius:15px;text-align:center;"><h2>شريحة أسطورية</h2></div>`); playSound('msg'); }
+function insToggle(){ document.execCommand('insertHTML',`<div style="padding:15px;border-left:4px solid var(--primary);margin:10px 0;"><b>Toggle:</b> محتوى قابل للطي هنا...</div>`); playSound('msg'); }
+function changeBG(){ const colors=['#050505','#1b1b2f','#0a0a1a','#110022','#001122','#111111']; document.getElementById('stars').style.background=colors[Math.floor(Math.random()*colors.length)]; }
+function uploadBG(){ const input=document.createElement('input'); input.type='file'; input.accept='image/*,video/*'; input.onchange=e=>{ const file=e.target.files[0]; const url=URL.createObjectURL(file); document.getElementById('stars').style.background=`url('${url}') center/cover no-repeat`; }; input.click(); }
+function textColor(){ const color=prompt('اختر لون النص (مثال: red أو #00ff00)'); if(color) execCmd('foreColor',color); playSound('msg'); }
 </script>
 </body>
 </html>
+
