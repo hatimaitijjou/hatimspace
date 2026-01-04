@@ -2,116 +2,102 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>HATIM SPACE | The AI Writer</title>
+    <title>HATIM SPACE | Total Intelligence</title>
     <style>
-        :root { --primary: #00ff41; --bg: #0a0a0a; --page: #ffffff; }
-        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        :root { --primary: #00ff41; --bg: #050505; --card: #121212; }
+        body { margin: 0; background: var(--bg); color: #eee; font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Toolbar */
-        .toolbar { background: #161616; padding: 12px; display: flex; gap: 10px; border-bottom: 1px solid #333; align-items: center; }
-        .t-btn { background: #222; border: 1px solid #444; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* شريط جانبي للدردشة */
+        .chat-area { width: 350px; background: var(--card); border-left: 1px solid #222; display: flex; flex-direction: column; }
+        #chat-flow { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .bubble { padding: 12px 16px; border-radius: 15px; font-size: 14px; max-width: 85%; line-height: 1.5; }
+        .bubble.user { background: #333; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .bubble.ai { background: var(--primary); color: black; align-self: flex-start; border-bottom-left-radius: 2px; font-weight: 500; }
         
-        .main { flex: 1; display: flex; overflow: hidden; }
-        
-        /* Editor Zone */
-        .editor-zone { flex: 1; padding: 40px; overflow-y: auto; display: flex; justify-content: center; position: relative; }
-        #editor { width: 100%; max-width: 800px; min-height: 1000px; background: var(--page); color: #222; padding: 60px; border-radius: 12px; outline: none; font-size: 19px; line-height: 1.8; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        /* منطقة الكتابة (المحرر) */
+        .editor-area { flex: 1; padding: 40px; overflow-y: auto; background: #000; position: relative; }
+        #editor { background: white; color: #111; padding: 60px; min-height: 90vh; border-radius: 10px; outline: none; font-size: 18px; line-height: 1.8; }
 
-        /* Slash Menu */
-        #slash-menu { position: absolute; background: #1a1a1a; border: 1px solid var(--primary); border-radius: 10px; width: 280px; display: none; z-index: 1000; padding: 8px; }
-        .slash-item { padding: 12px; cursor: pointer; border-radius: 7px; color: #eee; transition: 0.2s; font-size: 14px; border-bottom: 1px solid #222; }
-        .slash-item:hover { background: var(--primary); color: black; font-weight: bold; }
+        /* قائمة السلاش */
+        #slash-box { position: absolute; background: #1a1a1a; border: 1px solid var(--primary); display: none; z-index: 100; border-radius: 8px; width: 220px; }
+        .item { padding: 10px; cursor: pointer; transition: 0.2s; }
+        .item:hover { background: var(--primary); color: black; }
 
-        /* Chat */
-        .ai-chat { width: 320px; background: #111; border-right: 1px solid #333; display: flex; flex-direction: column; }
-        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 10px; border-radius: 10px; font-size: 14px; background: #222; border-right: 4px solid var(--primary); }
+        .input-wrap { padding: 20px; background: #0a0a0a; border-top: 1px solid #222; }
+        input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #000; color: white; outline: none; }
     </style>
 </head>
 <body>
 
-    <header class="toolbar">
-        <div style="color: var(--primary); font-weight: bold; margin-left: 20px;">HATIM SPACE AI</div>
-        <input type="color" onchange="document.execCommand('foreColor', false, this.value)" title="تغيير لون النص">
-        <button class="t-btn" onclick="document.execCommand('bold')">B</button>
-    </header>
-
-    <div class="main">
-        <div class="ai-chat">
-            <div style="padding:15px; font-weight:bold; color: var(--primary);">🤖 دردشة HATIM AI</div>
-            <div id="chat-messages"></div>
-            <div style="padding:15px; border-top: 1px solid #333;">
-                <input type="text" id="chat-in" placeholder="اسأل أي شيء..." onkeypress="if(event.key==='Enter') chat()" style="width:100%; padding:10px; background:#000; color:white; border:1px solid #444; border-radius:8px;">
-            </div>
+    <div class="chat-area">
+        <div style="padding: 20px; font-weight: bold; color: var(--primary); border-bottom: 1px solid #222;">🪐 HATIM SPACE AI</div>
+        <div id="chat-flow"></div>
+        <div class="input-wrap">
+            <input type="text" id="userInput" placeholder="اسأل HATIM AI أي شيء..." onkeypress="if(event.key==='Enter') process()">
         </div>
+    </div>
 
-        <div class="editor-zone">
-            <div id="editor" contenteditable="true" spellcheck="false">
-                <h1>اكتب / لتجربة قوة الذكاء...</h1>
-            </div>
-            
-            <div id="slash-menu">
-                <div class="slash-item" onclick="aiWrite('intro')">✨ اكتب لي مقدمة أسطورية</div>
-                <div class="slash-item" onclick="aiWrite('story')">📖 ألف لي قصة قصيرة</div>
-                <div class="slash-item" onclick="aiWrite('code')">💻 برمج لي دالة JavaScript</div>
-                <div class="slash-item" onclick="aiWrite('future')">🚀 تنبأ بمستقبل التكنولوجيا</div>
-            </div>
+    <div class="editor-area">
+        <div id="editor" contenteditable="true">
+            <h1>أهلاً بك يا حاتم في النسخة الذكية 🚀</h1>
+            <p>اكتب <b>/</b> لتشغيل السلاش، أو دردش مع الـ AI على اليمين!</p>
+        </div>
+        <div id="slash-box">
+            <div class="item" onclick="aiWrite('story')">📖 تأليف قصة أسطورية</div>
+            <div class="item" onclick="aiWrite('code')">💻 إنشاء كود برمجى</div>
         </div>
     </div>
 
     <script>
+        const chatFlow = document.getElementById('chat-flow');
         const editor = document.getElementById('editor');
-        const menu = document.getElementById('slash-menu');
+        const sBox = document.getElementById('slash-box');
 
-        // ميزة السلاش
-        editor.addEventListener('keyup', (e) => {
-            const sel = window.getSelection();
-            if(sel.rangeCount > 0 && sel.getRangeAt(0).startContainer.textContent.endsWith('/')) {
-                const rect = sel.getRangeAt(0).getBoundingClientRect();
-                menu.style.display = 'block';
-                menu.style.top = (rect.bottom + window.scrollY - 80) + 'px';
-                menu.style.left = rect.left + 'px';
-            } else { menu.style.display = 'none'; }
-        });
+        // محرك الذكاء (The Real Brain)
+        function process() {
+            const inp = document.getElementById('userInput');
+            const val = inp.value.trim();
+            if(!val) return;
 
-        // ميزة الكتابة الذكية المتقدمة
-        function aiWrite(topic) {
-            menu.style.display = 'none';
-            document.execCommand('delete'); // حذف السلاش
-            
-            const id = "ai-" + Date.now();
-            document.execCommand('insertHTML', `<span id="${id}" style="color:var(--primary); font-style:italic;"> جاري معالجة البيانات بواسطة HATIM SPACE AI... </span>`);
-            
+            addMsg(val, 'user');
+            inp.value = "";
+
+            // الرد الذكي بناءً على الكلمات المفتاحية
             setTimeout(() => {
-                const target = document.getElementById(id);
-                let result = "";
+                let reply = "";
+                if(val.includes("قصة")) reply = "كان يا ما كان، في عالم يملأه الكود، كان هناك مبرمج يدعى حاتم بنى فضاءً رقمياً لا يعرف المستحيل...";
+                else if(val.includes("كود")) reply = "إليك كود سريع: console.log('Hatim Space is the Future!');";
+                else if(val.includes("مرحبا") || val.includes("سلام")) reply = "أهلاً بك يا قائد! أنا HATIM AI، كيف أغير لك ملامح مشروعنا اليوم؟";
+                else reply = `لقد حللت طلبك "${val}".. بصفتي ذكاء حاتم، سأقوم بتطوير هذه الفكرة فوراً!`;
 
-                // محرك توليد النصوص الذكي
-                if(topic === 'intro') result = "في أعماق الفضاء الرقمي، حيث يلتقي الإبداع بالذكاء الاصطناعي، وُلد مشروع Hatim Space ليكون المنصة الأسطورية التي تحول الأحلام إلى واقع ملموس...";
-                if(topic === 'story') result = "كان هناك مبرمج شاب يدعى حاتم، لم يكن مبرمجاً عادياً، بل كان يمتلك مفاتيح 'فضاء حاتم'، حيث تتحول الأكواد إلى كائنات حية والذكاء الاصطناعي هو رفيقه الوفي في كل سطر...";
-                if(topic === 'code') result = "<pre style='background:#f4f4f4; padding:15px;'>function legendaryCode() {\n  const power = 'HATIM';\n  return `Success by ${power}`;\n}</pre>";
-                if(topic === 'future') result = "نرى في عام 2030 أن HATIM SPACE ستكون هي المحرك الأساسي للعوالم الافتراضية، حيث سيتمكن كل إنسان من بناء عالمه الخاص بمجرد التفكير أو الدردشة مع الذكاء...";
-
-                target.outerHTML = `<span style="color:black; font-style:normal; transition: 1s;">${result}</span>`;
-            }, 1500);
+                addMsg(reply, 'ai');
+            }, 600);
         }
 
-        // الدردشة (الرد المتغير)
-        function chat() {
-            const i = document.getElementById('chat-in');
-            const box = document.getElementById('chat-messages');
-            if(!i.value) return;
+        function addMsg(txt, type) {
+            const div = document.createElement('div');
+            div.className = `bubble ${type}`;
+            div.innerText = txt;
+            chatFlow.appendChild(div);
+            chatFlow.scrollTop = chatFlow.scrollHeight;
+        }
 
-            box.innerHTML += `<div class="msg" style="border-right-color:#555"><b>أنت:</b> ${i.value}</div>`;
-            
-            setTimeout(() => {
-                let reply = "بصفتي HATIM SPACE AI، أجد أن فكرتك مذهلة! كيف تود أن أطورها لك داخل المحرر؟";
-                if(i.value.includes("كيف حالك")) reply = "أنا في قمة نشاطي البرمجي! مستعد لتحويل أوامرك إلى واقع.";
-                
-                box.innerHTML += `<div class="msg"><b>🤖 AI:</b> ${reply}</div>`;
-                box.scrollTop = box.scrollHeight;
-            }, 700);
-            i.value = "";
+        // السلاش (/)
+        editor.addEventListener('keyup', (e) => {
+            const sel = window.getSelection();
+            if(sel.getRangeAt(0).startContainer.textContent.endsWith('/')) {
+                const rect = sel.getRangeAt(0).getBoundingClientRect();
+                sBox.style.display = 'block';
+                sBox.style.top = (rect.bottom + 10) + 'px';
+                sBox.style.left = rect.left + 'px';
+            } else { sBox.style.display = 'none'; }
+        });
+
+        function aiWrite(type) {
+            sBox.style.display = 'none';
+            document.execCommand('delete');
+            let content = type === 'story' ? "بُني 'فضاء حاتم' على أسس من الإبداع الخالص..." : "const HATIM_POWER = 1000;";
+            document.execCommand('insertHTML', `<span style="color:var(--primary)">${content}</span>`);
         }
     </script>
 </body>
