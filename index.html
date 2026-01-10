@@ -3,437 +3,437 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HATIM OS | Ultimate Edition</title>
+    <title>HATIM OS | Global Empire</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #0078d4; /* Windows Blue */
-            --hatim-green: #00ff88;
-            --glass: rgba(25, 25, 35, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text: #ffffff;
-            --taskbar-h: 48px;
+            --primary: #d4af37; /* الذهبي الملكي */
+            --accent: #000;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-strong: rgba(20, 20, 20, 0.85);
+            --border: rgba(212, 175, 55, 0.3);
+            --text: #eee;
+            --taskbar-h: 60px;
         }
 
-        * { box-sizing: border-box; user-select: none; }
-        body { margin: 0; padding: 0; overflow: hidden; font-family: 'Cairo', sans-serif; height: 100vh; background: #000; color: var(--text); }
+        * { box-sizing: border-box; user-select: none; font-family: 'Tajawal', sans-serif; }
+        body { margin: 0; overflow: hidden; height: 100vh; background: #000; color: var(--text); }
 
-        /* --- شاشة الإقلاع (Boot) --- */
+        /* الخلفية الفخمة */
+        #wallpaper {
+            position: fixed; inset: 0;
+            background: url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=2070') center/cover;
+            filter: brightness(0.6); z-index: -2; transition: 1s;
+        }
+
+        /* الشريط العلوي (Global Bar) */
+        #top-bar {
+            position: fixed; top: 0; left: 0; right: 0; height: 30px;
+            background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; font-size: 0.8rem; z-index: 5000; border-bottom: 1px solid var(--border);
+        }
+        .live-badge { color: red; animation: blink 2s infinite; margin-left: 5px; }
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* شاشة الإقلاع */
         #boot-screen {
-            position: fixed; inset: 0; background: #000; z-index: 99999;
+            position: fixed; inset: 0; background: #050505; z-index: 99999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 1s;
         }
-        .boot-logo { font-size: 5rem; font-weight: 900; background: linear-gradient(45deg, var(--hatim-green), #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; animation: pulse 2s infinite; }
-        .loader { width: 50px; height: 50px; border: 4px solid #333; border-top-color: var(--hatim-green); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 50% { opacity: 0.7; } }
+        .empire-logo {
+            font-size: 4rem; background: linear-gradient(45deg, #d4af37, #fff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 5px; font-weight: 900;
+            margin-bottom: 10px; animation: shine 3s infinite;
+        }
+        @keyframes shine { 0%{filter:brightness(1);} 50%{filter:brightness(1.5); text-shadow:0 0 20px #d4af37;} 100%{filter:brightness(1);} }
 
-        /* --- سطح المكتب --- */
+        /* سطح المكتب */
         #desktop {
-            position: absolute; inset: 0;
-            background: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop') center/cover;
-            padding: 10px; display: flex; flex-direction: column; flex-wrap: wrap; align-content: flex-start; gap: 10px;
+            position: absolute; inset: 0; top: 30px; bottom: var(--taskbar-h);
+            padding: 30px; display: flex; flex-direction: column; flex-wrap: wrap; align-content: flex-start; gap: 25px;
         }
-
-        .desktop-icon {
-            width: 85px; height: 95px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-radius: 5px; cursor: pointer; transition: 0.2s; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        .app-icon {
+            width: 90px; display: flex; flex-direction: column; align-items: center; cursor: pointer;
+            text-shadow: 0 2px 5px black; transition: 0.3s; position: relative;
         }
-        .desktop-icon:hover { background: rgba(255,255,255,0.1); }
-        .desktop-icon i { font-size: 2.5rem; margin-bottom: 5px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
-        .desktop-icon span { font-size: 0.85rem; text-align: center; }
+        .app-icon:hover { transform: translateY(-5px); }
+        .icon-box {
+            width: 65px; height: 65px; border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin-bottom: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+        }
+        .del-btn { position: absolute; top: -5px; right: 10px; background: red; width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; }
+        .app-icon:hover .del-btn { display: flex; }
 
-        /* --- النوافذ (Windows) --- */
+        /* النوافذ */
         .window {
-            position: absolute; background: #202020; border-radius: 8px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px var(--glass-border);
-            display: flex; flex-direction: column; overflow: hidden;
-            animation: popIn 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-            min-width: 300px; min-height: 200px; resize: both;
+            position: absolute; background: var(--glass-strong); backdrop-filter: blur(40px);
+            border: 1px solid var(--border); border-radius: 12px;
+            display: flex; flex-direction: column; box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+            min-width: 400px; min-height: 300px; resize: both; overflow: hidden;
+            animation: openWin 0.4s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes openWin { from{transform:translateY(50px) scale(0.9);opacity:0;} to{transform:translateY(0) scale(1);opacity:1;} }
 
         .win-header {
-            height: 35px; background: #2b2b2b; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 10px; cursor: default; user-select: none;
+            height: 45px; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 20px; cursor: grab;
         }
-        .win-title { font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
-        .win-controls { display: flex; }
-        .win-btn { width: 40px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .win-btn:hover { background: #3a3a3a; }
-        .win-btn.close:hover { background: #e81123; }
+        .win-title { font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .win-controls { display: flex; gap: 8px; }
+        .win-btn { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+        .close { background: #ff5f57; } .max { background: #28c840; }
 
-        .win-body { flex: 1; background: #191919; position: relative; overflow: hidden; cursor: text; }
-        .win-body iframe { width: 100%; height: 100%; border: none; }
+        .win-body { flex: 1; overflow: hidden; position: relative; background: rgba(255,255,255,0.02); }
 
-        /* --- شريط المهام --- */
+        /* شريط المهام */
         #taskbar {
-            position: fixed; bottom: 0; left: 0; right: 0; height: var(--taskbar-h);
-            background: var(--glass); backdrop-filter: blur(20px);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 15px; border-top: 1px solid var(--glass-border); z-index: 10000;
+            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 95%; height: var(--taskbar-h);
+            background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(30px);
+            border: 1px solid var(--border); border-radius: 20px;
+            display: flex; align-items: center; padding: 0 20px; z-index: 10000; box-shadow: 0 20px 50px black;
         }
-
-        .start-btn {
-            font-size: 1.5rem; color: #00d4ff; cursor: pointer; padding: 5px 10px; border-radius: 5px; transition: 0.2s;
+        .start-btn { font-size: 2rem; color: var(--primary); cursor: pointer; margin-left: 10px; transition: 0.3s; }
+        .start-btn:hover { transform: scale(1.1) rotate(10deg); text-shadow: 0 0 15px var(--primary); }
+        .dock { display: flex; gap: 10px; margin: 0 20px; flex: 1; }
+        .dock-item {
+            width: 45px; height: 45px; border-radius: 12px; background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
+            transition: 0.2s; position: relative;
         }
-        .start-btn:hover { background: rgba(255,255,255,0.1); filter: drop-shadow(0 0 5px #00d4ff); }
+        .dock-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-5px); }
+        .dock-item.active::after { content:''; position: absolute; bottom: -5px; width: 20px; height: 3px; background: var(--primary); }
 
-        .task-apps { flex: 1; display: flex; justify-content: center; gap: 5px; height: 100%; }
-        .task-icon {
-            width: 40px; height: 40px; margin-top: 4px; border-radius: 5px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            font-size: 1.2rem; position: relative; transition: 0.2s;
-        }
-        .task-icon:hover { background: rgba(255,255,255,0.1); }
-        .task-icon.active::after { content: ''; position: absolute; bottom: 2px; width: 15px; height: 3px; background: var(--hatim-green); border-radius: 2px; }
-
-        .system-tray { font-size: 0.8rem; display: flex; flex-direction: column; align-items: flex-end; cursor: default; }
-
-        /* --- قائمة ابدأ --- */
-        #start-menu {
-            position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%) translateY(20px);
-            width: 500px; height: 500px; background: rgba(30, 30, 40, 0.95); backdrop-filter: blur(30px);
-            border-radius: 10px; border: 1px solid var(--glass-border);
-            display: none; flex-direction: column; padding: 25px; box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            transition: 0.2s; z-index: 9999;
-        }
-        #start-menu.show { display: flex; transform: translateX(-50%) translateY(0); }
+        /* --- تصميم التطبيقات --- */
         
-        .start-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding-top: 20px; }
-        .start-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 10px; border-radius: 8px; transition: 0.2s; }
-        .start-item:hover { background: rgba(255,255,255,0.1); }
-        .start-item i { font-size: 1.8rem; }
-
-        /* --- محرر HATIM STUDIO (خاصية السلاش) --- */
-        .editor-area { padding: 40px; color: #eee; font-size: 1.1rem; min-height: 100%; outline: none; }
+        /* H-Writer */
+        .writer-toolbar { padding: 10px; background: #222; border-bottom: 1px solid #444; display: flex; gap: 10px; }
+        .writer-btn { background: #333; border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .writer-paper { width: 100%; height: 100%; background: white; color: black; padding: 40px; outline: none; overflow-y: auto; }
         
-        .h-block { padding: 5px 0; position: relative; }
-        .h-block:hover::before { content: '⋮⋮'; position: absolute; left: -25px; color: #555; cursor: grab; }
+        /* H-Chat (WhatsApp Style) */
+        .chat-layout { display: flex; height: 100%; }
+        .chat-sidebar { width: 250px; background: #111; border-left: 1px solid #333; overflow-y: auto; }
+        .chat-contact { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .chat-contact:hover { background: #222; }
+        .chat-contact img { width: 40px; height: 40px; border-radius: 50%; background: #555; }
+        .chat-main { flex: 1; display: flex; flex-direction: column; background: #000; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); }
+        .chat-msgs { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-bubble { max-width: 70%; padding: 10px 15px; border-radius: 10px; font-size: 0.9rem; position: relative; }
+        .chat-bubble.in { background: #202c33; align-self: flex-start; color: white; border-top-left-radius: 0; }
+        .chat-bubble.out { background: #005c4b; align-self: flex-end; color: white; border-top-right-radius: 0; }
         
-        /* القائمة العائمة للسلاش */
-        #slash-popup {
-            position: fixed; width: 250px; background: #252525; border: 1px solid #444;
-            border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            display: none; z-index: 999999; overflow: hidden;
-        }
-        .slash-item { padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #ccc; font-size: 0.9rem; }
-        .slash-item:hover { background: var(--primary); color: white; }
-
-        /* مكونات المحرر */
-        h1.h-block { font-size: 2rem; border-bottom: 1px solid #333; padding-bottom: 10px; color: var(--hatim-green); }
-        .todo-box { display: flex; align-items: center; gap: 10px; }
-        .todo-check { width: 18px; height: 18px; accent-color: var(--hatim-green); }
-        .code-block { background: #111; padding: 15px; border-radius: 6px; font-family: monospace; color: #00ff88; border: 1px solid #333; }
-
+        /* المتجر */
+        .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; padding: 20px; }
+        .store-item { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid transparent; }
+        .store-item:hover { border-color: var(--primary); }
+        .install-btn { width: 100%; padding: 8px; margin-top: 10px; background: var(--primary); border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
     </style>
 </head>
 <body>
 
-    <!-- شاشة الإقلاع -->
+    <div id="wallpaper"></div>
+    
+    <!-- الشريط العلوي العالمي -->
+    <div id="top-bar">
+        <div style="display:flex; align-items:center;">
+            <i class="fas fa-globe"></i>&nbsp; HATIM NETWORK &nbsp;|&nbsp; 
+            <span style="color:#aaa;">Users Online:</span>&nbsp; <span id="user-count" style="font-weight:bold;">1,000,000</span>
+            <i class="fas fa-circle live-badge" style="font-size:0.5rem;"></i>
+        </div>
+        <div id="clock">12:00 PM</div>
+    </div>
+
+    <!-- الإقلاع -->
     <div id="boot-screen">
-        <div class="boot-logo"><i class="fab fa-windows"></i> HATIM OS</div>
-        <div class="loader"></div>
-        <p style="margin-top: 20px; color: #666;">يتم تحضير نظام القائد حاتم...</p>
+        <div class="empire-logo">HATIM EMPIRE</div>
+        <div style="color:#888;">CONNECTING TO GLOBAL SERVERS...</div>
     </div>
 
-    <!-- قائمة السلاش (مخفية) -->
-    <div id="slash-popup">
-        <div class="slash-item" onclick="execSlash('h1')"><i class="fas fa-heading"></i> عنوان كبير</div>
-        <div class="slash-item" onclick="execSlash('h2')"><i class="fas fa-heading" style="font-size:0.8em"></i> عنوان فرعي</div>
-        <div class="slash-item" onclick="execSlash('todo')"><i class="fas fa-check-square"></i> قائمة مهام</div>
-        <div class="slash-item" onclick="execSlash('code')"><i class="fas fa-code"></i> كود برمجي</div>
-        <div class="slash-item" onclick="execSlash('img')"><i class="fas fa-image"></i> صورة</div>
-        <div class="slash-item" onclick="execSlash('youtube')"><i class="fab fa-youtube"></i> فيديو يوتيوب</div>
-    </div>
-
-    <!-- سطح المكتب -->
-    <div id="desktop">
-        <div class="desktop-icon" onclick="openWindow('studio')">
-            <i class="fas fa-pen-nib" style="color:#ff00dd;"></i>
-            <span>Hatim Studio</span>
-        </div>
-        <div class="desktop-icon" onclick="openWindow('browser')">
-            <i class="fas fa-globe" style="color:#00d4ff;"></i>
-            <span>المتصفح</span>
-        </div>
-        <div class="desktop-icon" onclick="openWindow('files')">
-            <i class="fas fa-folder" style="color:#ffcc00;"></i>
-            <span>ملفاتي</span>
-        </div>
-        <div class="desktop-icon" onclick="openWindow('settings')">
-            <i class="fas fa-cog" style="color:#aaa;"></i>
-            <span>الإعدادات</span>
-        </div>
-    </div>
-
-    <!-- منطقة النوافذ -->
-    <div id="windows-area"></div>
-
-    <!-- قائمة ابدأ -->
-    <div id="start-menu">
-        <div style="padding-bottom: 15px; border-bottom: 1px solid #333;">
-            <input type="text" placeholder="ابحث عن التطبيقات والملفات..." style="width:100%; padding:10px; background:#111; border:1px solid #333; color:white; border-radius:5px;">
-        </div>
-        <div style="font-size:0.9rem; font-weight:bold; margin-top:20px;">مثبتة</div>
-        <div class="start-grid">
-            <div class="start-item" onclick="openWindow('studio')"><i class="fas fa-pen-nib" style="color:#ff00dd;"></i> <span>Studio</span></div>
-            <div class="start-item" onclick="openWindow('browser')"><i class="fas fa-globe" style="color:#00d4ff;"></i> <span>Web</span></div>
-            <div class="start-item" onclick="openWindow('youtube')"><i class="fab fa-youtube" style="color:red;"></i> <span>YouTube</span></div>
-            <div class="start-item" onclick="openWindow('files')"><i class="fas fa-folder" style="color:#ffcc00;"></i> <span>Files</span></div>
-        </div>
-        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #333; display:flex; justify-content:space-between; align-items:center;">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <div style="width:30px; height:30px; background:var(--hatim-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:black; font-weight:bold;">H</div>
-                <span>Hatim Admin</span>
-            </div>
-            <i class="fas fa-power-off" style="color:#ff4444; cursor:pointer;" onclick="location.reload()"></i>
-        </div>
-    </div>
+    <!-- الواجهة -->
+    <div id="desktop"></div>
+    <div id="win-layer"></div>
 
     <!-- شريط المهام -->
     <div id="taskbar">
-        <div class="start-btn" onclick="toggleStart()"><i class="fab fa-windows"></i></div>
-        
-        <div class="task-apps" id="task-apps">
-            <!-- أيقونات التطبيقات المفتوحة تظهر هنا -->
-        </div>
-
-        <div class="system-tray">
-            <div id="clock-time" style="font-weight:bold;">12:00 AM</div>
-            <div id="clock-date" style="font-size:0.75rem; color:#aaa;">2026/01/01</div>
-        </div>
+        <div class="start-btn" onclick="openApp('store')"><i class="fab fa-fort-awesome"></i></div>
+        <div class="dock" id="dock"></div>
+        <div style="font-size:0.8rem; color:#aaa;">v 10.0 Ultimate</div>
     </div>
 
     <script>
-        // --- 1. Boot System ---
+        // --- 1. النظام المركزي ---
+        const sys = {
+            key: 'hatim_empire_v1',
+            apps: [], // التطبيقات المثبتة
+            zIndex: 100
+        };
+
+        const db = {
+            'store': { name: 'المتجر الملكي', icon: 'fas fa-store', color: '#d4af37', core: true, render: renderStore },
+            'writer': { name: 'H-Writer', icon: 'fas fa-paragraph', color: '#2b5797', render: renderWriter },
+            'sheets': { name: 'H-Sheets', icon: 'fas fa-table', color: '#185c37', render: renderSheets },
+            'chat': { name: 'H-Chat Global', icon: 'fab fa-whatsapp', color: '#25d366', render: renderChat, init: initChat },
+            'media': { name: 'H-Media', icon: 'fas fa-play-circle', color: '#ff0055', render: renderMedia },
+            'gallery': { name: 'H-Gallery', icon: 'fas fa-images', color: '#e040fb', render: renderGallery },
+            'browser': { name: 'المتصفح', icon: 'fas fa-globe', color: '#00d4ff', type: 'iframe', url: 'https://www.wikipedia.org' }
+        };
+
+        // --- 2. الإقلاع ---
         window.onload = () => {
+            loadSys();
+            liveCounter();
+            updateClock();
             setTimeout(() => {
                 document.getElementById('boot-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('boot-screen').style.display = 'none';
-                    // تشغيل صوت الترحيب (اختياري)
-                    // new Audio('startup.mp3').play().catch(e=>{});
-                }, 1000);
-            }, 2500);
-            updateClock();
+                setTimeout(() => document.getElementById('boot-screen').style.display = 'none', 1000);
+            }, 3000);
         };
 
-        // --- 2. Window Management (قلب النظام) ---
-        let zIndex = 100;
-        const windowsArea = document.getElementById('windows-area');
-        const taskApps = document.getElementById('task-apps');
-
-        const apps = {
-            'studio': { title: 'Hatim Studio', icon: 'fas fa-pen-nib', color: '#ff00dd', type: 'editor' },
-            'browser': { title: 'متصفح الإنترنت', icon: 'fas fa-globe', color: '#00d4ff', type: 'iframe', url: 'https://www.wikipedia.org' },
-            'youtube': { title: 'YouTube', icon: 'fab fa-youtube', color: 'red', type: 'iframe', url: 'https://www.youtube.com/embed/jfKfPfyJRdk' },
-            'files': { title: 'ملفات النظام', icon: 'fas fa-folder', color: '#ffcc00', type: 'html', content: '<div style="padding:20px; text-align:center;"><i class="fas fa-folder-open" style="font-size:5rem; color:#333;"></i><p>جاري البحث عن ملفات القائد...</p></div>' },
-            'settings': { title: 'الإعدادات', icon: 'fas fa-cog', color: '#aaa', type: 'html', content: '<div style="padding:20px;"><h2>نظام حاتم 1.0</h2><p>تم التطوير بواسطة حاتم آيت أجو.</p><button style="padding:10px; background:var(--primary); border:none; color:white; border-radius:5px;">تحديث النظام</button></div>' }
-        };
-
-        function openWindow(appId) {
-            const app = apps[appId];
-            document.getElementById('start-menu').classList.remove('show');
-
-            // إنشاء النافذة
-            const wid = 'win-' + Date.now();
-            const win = document.createElement('div');
-            win.className = 'window';
-            win.id = wid;
-            win.style.zIndex = ++zIndex;
-            win.style.left = (100 + Math.random()*50) + 'px';
-            win.style.top = (50 + Math.random()*50) + 'px';
-            win.style.width = '800px';
-            win.style.height = '500px';
-
-            // محتوى النافذة
-            let content = '';
-            if(app.type === 'iframe') content = `<iframe src="${app.url}"></iframe>`;
-            else if(app.type === 'html') content = `<div class="win-body">${app.content}</div>`;
-            else if(app.type === 'editor') content = `
-                <div class="win-body" onclick="focusEditor('${wid}')">
-                    <div id="editor-${wid}" class="editor-area" contenteditable="true" spellcheck="false">
-                        <h1 class="h-block">مرحبًا بك في Hatim Studio 🚀</h1>
-                        <div class="h-block">اضغط "/" لترى السحر...</div>
-                    </div>
-                </div>`;
-
-            win.innerHTML = `
-                <div class="win-header" onmousedown="dragWindow(event, '${wid}')">
-                    <div class="win-title"><i class="${app.icon}" style="color:${app.color}"></i> ${app.title}</div>
-                    <div class="win-controls">
-                        <div class="win-btn" onclick="minWindow('${wid}')"><i class="fas fa-minus"></i></div>
-                        <div class="win-btn" onclick="maxWindow('${wid}')"><i class="far fa-square"></i></div>
-                        <div class="win-btn close" onclick="closeWindow('${wid}')"><i class="fas fa-times"></i></div>
-                    </div>
-                </div>
-                ${content}
-            `;
-
-            // عند النقر على النافذة، تصبح في المقدمة
-            win.onmousedown = () => { win.style.zIndex = ++zIndex; };
-
-            windowsArea.appendChild(win);
-            addToTaskbar(wid, app);
-
-            // تفعيل السلاش للمحرر إذا كان هو المفتوح
-            if(app.type === 'editor') setupEditor(wid);
+        function loadSys() {
+            const saved = localStorage.getItem(sys.key);
+            sys.apps = saved ? JSON.parse(saved) : ['store', 'chat', 'writer']; // افتراضيا
+            refreshDesk();
         }
 
-        function closeWindow(wid) {
-            document.getElementById(wid).remove();
-            document.getElementById('task-' + wid).remove();
-        }
-
-        function maxWindow(wid) {
-            const w = document.getElementById(wid);
-            if(w.style.width === '100%') {
-                w.style.width = '800px'; w.style.height = '500px'; w.style.top = '100px'; w.style.left = '100px';
-            } else {
-                w.style.width = '100%'; w.style.height = 'calc(100% - 48px)'; w.style.top = '0'; w.style.left = '0';
-            }
-        }
-
-        function minWindow(wid) {
-            document.getElementById(wid).style.display = 'none';
-            document.getElementById('task-'+wid).classList.remove('active');
-        }
-
-        function addToTaskbar(wid, app) {
-            const item = document.createElement('div');
-            item.className = 'task-icon active';
-            item.id = 'task-' + wid;
-            item.innerHTML = `<i class="${app.icon}" style="color:${app.color}"></i>`;
-            item.onclick = () => {
-                const w = document.getElementById(wid);
-                if(w.style.display === 'none') {
-                    w.style.display = 'flex';
-                    w.style.zIndex = ++zIndex;
-                    item.classList.add('active');
-                } else {
-                    // إذا كانت في المقدمة، قم بتصغيرها
-                    if(parseInt(w.style.zIndex) === zIndex) {
-                        minWindow(wid);
-                    } else {
-                        w.style.zIndex = ++zIndex;
-                    }
-                }
-            };
-            taskApps.appendChild(item);
-        }
-
-        // --- 3. Window Dragging Logic ---
-        function dragWindow(e, wid) {
-            if(e.target.classList.contains('win-btn') || e.target.closest('.win-btn')) return;
-            const win = document.getElementById(wid);
-            win.style.zIndex = ++zIndex;
-            
-            let shiftX = e.clientX - win.getBoundingClientRect().left;
-            let shiftY = e.clientY - win.getBoundingClientRect().top;
-
-            function moveAt(pageX, pageY) {
-                win.style.left = pageX - shiftX + 'px';
-                win.style.top = pageY - shiftY + 'px';
-            }
-
-            function onMouseMove(event) { moveAt(event.pageX, event.pageY); }
-
-            document.addEventListener('mousemove', onMouseMove);
-
-            win.onmouseup = function() {
-                document.removeEventListener('mousemove', onMouseMove);
-                win.onmouseup = null;
-            };
-        }
-
-        // --- 4. Hatim Studio Logic (Slash Commands) ---
-        let currentEditor = null;
-        let lastRange = null;
-
-        function setupEditor(wid) {
-            const ed = document.getElementById('editor-' + wid);
-            
-            ed.addEventListener('keyup', (e) => {
-                const sel = window.getSelection();
-                if(!sel.rangeCount) return;
-                
-                // كشف السلاش /
-                if (e.key === '/') {
-                    const range = sel.getRangeAt(0);
-                    const rect = range.getBoundingClientRect();
-                    currentEditor = ed;
-                    lastRange = range;
-                    
-                    const menu = document.getElementById('slash-popup');
-                    menu.style.display = 'block';
-                    menu.style.top = (rect.bottom + 5) + 'px';
-                    menu.style.left = rect.left + 'px';
-                } else {
-                    document.getElementById('slash-popup').style.display = 'none';
-                }
-
-                if(e.key === 'Enter') {
-                    e.preventDefault();
-                    document.execCommand('insertHTML', false, '<div class="h-block"><br></div>');
+        function refreshDesk() {
+            const d = document.getElementById('desktop');
+            d.innerHTML = '';
+            sys.apps.forEach(id => {
+                const app = db[id];
+                if(app) {
+                    d.innerHTML += `
+                    <div class="app-icon" onclick="openWin('${id}')">
+                        <div class="icon-box" style="color:${app.color}"><i class="${app.icon}"></i></div>
+                        <span>${app.name}</span>
+                        ${!app.core ? `<div class="del-btn" onclick="event.stopPropagation(); uninstall('${id}')">x</div>` : ''}
+                    </div>`;
                 }
             });
         }
 
-        function execSlash(type) {
-            document.getElementById('slash-popup').style.display = 'none';
-            if(currentEditor) currentEditor.focus();
-            
-            // حذف الـ /
-            document.execCommand('delete');
+        // --- 3. المتجر ---
+        function renderStore() {
+            let h = `<div class="store-grid">`;
+            Object.keys(db).forEach(k => {
+                if(k === 'store') return;
+                const installed = sys.apps.includes(k);
+                h += `
+                <div class="store-item">
+                    <i class="${db[k].icon}" style="font-size:2rem; color:${db[k].color}; margin-bottom:10px;"></i>
+                    <div style="font-weight:bold">${db[k].name}</div>
+                    <button class="install-btn" style="background:${installed?'#333':''}" onclick="${installed?'':'install(\''+k+'\')'}">
+                        ${installed ? 'مثبت' : 'تثبيت'}
+                    </button>
+                </div>`;
+            });
+            return h + `</div>`;
+        }
 
-            let html = '';
-            switch(type) {
-                case 'h1': html = '<h1 class="h-block">عنوان كبير</h1>'; break;
-                case 'h2': html = '<h2 class="h-block">عنوان فرعي</h2>'; break;
-                case 'todo': html = '<div class="h-block todo-box"><input type="checkbox" class="todo-check"><span>مهمة جديدة</span></div>'; break;
-                case 'code': html = '<div class="h-block code-block">console.log("Hatim OS Rocks!");</div>'; break;
-                case 'img': 
-                    const url = prompt('رابط الصورة:');
-                    if(url) html = `<div class="h-block"><img src="${url}" style="max-width:100%; border-radius:8px;"></div>`; 
-                    break;
-                case 'youtube':
-                    const v = prompt('رابط يوتيوب:');
-                    if(v) html = `<div class="h-block"><iframe width="100%" height="300" src="https://www.youtube.com/embed/${v.split('v=')[1]||''}" style="border:none;"></iframe></div>`;
-                    break;
-            }
-            
-            if(html) {
-                document.execCommand('insertHTML', false, html);
-                document.execCommand('insertHTML', false, '<div class="h-block"><br></div>');
+        function install(id) {
+            sys.apps.push(id);
+            localStorage.setItem(sys.key, JSON.stringify(sys.apps));
+            refreshDesk();
+            // تحديث نافذة المتجر المفتوحة
+            document.querySelectorAll('.window').forEach(w => {
+                if(w.querySelector('.store-grid')) w.querySelector('.win-body').innerHTML = renderStore();
+            });
+        }
+        
+        function uninstall(id) {
+            if(confirm('حذف التطبيق؟')) {
+                sys.apps = sys.apps.filter(x => x !== id);
+                localStorage.setItem(sys.key, JSON.stringify(sys.apps));
+                refreshDesk();
             }
         }
 
-        // --- 5. System Utilities ---
-        function toggleStart() {
-            document.getElementById('start-menu').classList.toggle('show');
+        // --- 4. H-Office ---
+        function renderWriter(wid) {
+            return `
+            <div style="display:flex; flex-direction:column; height:100%;">
+                <div class="writer-toolbar">
+                    <button class="writer-btn" onclick="document.execCommand('bold')"><b>B</b></button>
+                    <button class="writer-btn" onclick="document.execCommand('italic')"><i>I</i></button>
+                    <button class="writer-btn" onclick="document.execCommand('underline')"><u>U</u></button>
+                    <button class="writer-btn" onclick="document.execCommand('justifyLeft')"><i class="fas fa-align-left"></i></button>
+                    <button class="writer-btn" style="margin-right:auto; background:var(--primary);" onclick="alert('تم الحفظ في السحابة الملكية ☁️')">حفظ</button>
+                </div>
+                <div class="writer-paper" contenteditable="true"><h1>مشروع جديد</h1><p>ابدأ الكتابة هنا...</p></div>
+            </div>`;
         }
 
-        // إغلاق القوائم عند النقر خارجها
-        window.addEventListener('click', (e) => {
-            if(!e.target.closest('#start-menu') && !e.target.closest('.start-btn')) {
-                document.getElementById('start-menu').classList.remove('show');
+        function renderSheets(wid) {
+            let table = '<table border="1" style="width:100%; border-collapse:collapse; border-color:#444;">';
+            for(let i=0; i<10; i++) {
+                table += '<tr>';
+                for(let j=0; j<5; j++) {
+                    table += `<td contenteditable="true" style="padding:5px; background:${i==0?'#333':'transparent'}; color:${i==0?'var(--primary)':'white'}; text-align:center;">${i==0 ? 'Col '+(j+1) : ''}</td>`;
+                }
+                table += '</tr>';
             }
-        });
+            return `<div style="padding:20px; overflow:auto;">${table}</table></div>`;
+        }
+
+        // --- 5. H-Chat Global (محاكاة الشهرة) ---
+        function renderChat(wid) {
+            return `
+            <div class="chat-layout">
+                <div class="chat-sidebar">
+                    <div class="chat-contact" style="background:#222;"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hatim"> <b>الرئيسية (Global)</b></div>
+                    <div class="chat-contact"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Elon"> <b>Elon Musk</b></div>
+                    <div class="chat-contact"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bill"> <b>Bill Gates</b></div>
+                </div>
+                <div class="chat-main">
+                    <div class="chat-msgs" id="chat-feed-${wid}"></div>
+                    <div style="padding:10px; background:#111; display:flex; gap:10px;">
+                        <input type="text" id="chat-in-${wid}" style="flex:1; padding:10px; border-radius:20px; border:none;" placeholder="اكتب رسالة للعالم..." onkeypress="if(event.key==='Enter') sendMsg('${wid}')">
+                        <button onclick="sendMsg('${wid}')" style="background:var(--primary); border:none; width:40px; border-radius:50%; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function initChat(wid) {
+            const feed = document.getElementById(`chat-feed-${wid}`);
+            // رسائل وهمية أولية
+            feed.innerHTML = `
+                <div class="chat-bubble in" style="background:#333; font-size:0.8rem; text-align:center; align-self:center; max-width:100%;">تم تشفير الرسائل بينك وبين معجبيك</div>
+                <div class="chat-bubble in">Hello Hatim! Big fan from USA! 🇺🇸</div>
+            `;
+            
+            // محاكاة وصول رسائل عشوائية
+            setInterval(() => {
+                const randomMsgs = [
+                    "مرحباً حاتم، نظامك رائع! 🇸🇦",
+                    "Love the design! greetings from Germany 🇩🇪",
+                    "هل يمكنك إضافتي كمطور؟",
+                    "أفضل نظام تشغيل في 2026! 🚀",
+                    "こんにちは (Konnichiwa) from Japan 🇯🇵"
+                ];
+                if(Math.random() > 0.7) { // 30% فرصة
+                    const msg = randomMsgs[Math.floor(Math.random() * randomMsgs.length)];
+                    feed.innerHTML += `<div class="chat-bubble in">${msg}</div>`;
+                    feed.scrollTop = feed.scrollHeight;
+                }
+            }, 3000);
+        }
+
+        function sendMsg(wid) {
+            const inp = document.getElementById(`chat-in-${wid}`);
+            const feed = document.getElementById(`chat-feed-${wid}`);
+            if(!inp.value) return;
+            feed.innerHTML += `<div class="chat-bubble out">${inp.value}</div>`;
+            inp.value = '';
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        // --- 6. Media & Gallery ---
+        function renderMedia(wid) {
+            return `
+            <div style="display:flex; flex-direction:column; height:100%; background:black;">
+                <div style="padding:10px; display:flex; gap:10px;">
+                    <input type="text" id="vid-url-${wid}" placeholder="رابط يوتيوب (أو اترك فارغاً للتجربة)" style="flex:1; padding:5px; background:#222; border:1px solid #444; color:white;">
+                    <button onclick="playVid('${wid}')" style="background:var(--primary); border:none; color:white; padding:5px 15px; cursor:pointer;">تشغيل</button>
+                </div>
+                <iframe id="vid-frame-${wid}" style="flex:1; border:none;" src="https://www.youtube.com/embed/LXb3EKWsInQ?autoplay=1&mute=1"></iframe>
+            </div>`;
+        }
+        function playVid(wid) {
+            const url = document.getElementById(`vid-url-${wid}`).value;
+            const frame = document.getElementById(`vid-frame-${wid}`);
+            if(url.includes('v=')) {
+                const id = url.split('v=')[1].split('&')[0];
+                frame.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            }
+        }
+
+        function renderGallery(wid) {
+            const images = [
+                'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400',
+                'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=400',
+                'https://images.unsplash.com/photo-1511765224389-37f0e77cf0ad?w=400',
+                'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400'
+            ];
+            return `
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px; padding:10px;">
+                ${images.map(src => `<div style="height:150px; background:url('${src}') center/cover; border-radius:10px; cursor:pointer; transition:0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"></div>`).join('')}
+            </div>`;
+        }
+
+        // --- 7. Window Manager ---
+        function openWin(id) {
+            const app = db[id];
+            const wid = 'win-' + Date.now();
+            const w = document.createElement('div');
+            w.className = 'window';
+            w.id = wid;
+            w.style.zIndex = ++sys.zIndex;
+            w.style.width = '700px'; w.style.height = '500px';
+            w.style.left = (50 + Math.random()*50)+'px'; w.style.top = (80 + Math.random()*50)+'px';
+
+            let body = '';
+            if(app.type === 'iframe') body = `<iframe src="${app.url}" style="width:100%; height:100%; border:none;"></iframe>`;
+            else if(app.render) body = app.render(wid);
+
+            w.innerHTML = `
+                <div class="win-header" onmousedown="drag(event, '${wid}')">
+                    <div class="win-title"><i class="${app.icon}"></i> ${app.name}</div>
+                    <div class="win-controls">
+                        <div class="win-btn close" onclick="closeWin('${wid}')"></div>
+                    </div>
+                </div>
+                <div class="win-body">${body}</div>`;
+            
+            w.onmousedown = () => w.style.zIndex = ++sys.zIndex;
+            document.getElementById('win-layer').appendChild(w);
+            addDock(wid, app);
+            if(app.init) app.init(wid);
+        }
+
+        function closeWin(wid) {
+            document.getElementById(wid).remove();
+            document.getElementById('dock-'+wid).remove();
+        }
+
+        function addDock(wid, app) {
+            const d = document.getElementById('dock');
+            d.innerHTML += `<div class="dock-item active" id="dock-${wid}" onclick="document.getElementById('${wid}').style.zIndex=++sys.zIndex"><i class="${app.icon}" style="color:${app.color}"></i></div>`;
+        }
+
+        function drag(e, wid) {
+            if(e.target.closest('.win-controls')) return;
+            const w = document.getElementById(wid);
+            const dx = e.clientX - w.offsetLeft;
+            const dy = e.clientY - w.offsetTop;
+            document.onmousemove = (ev) => { w.style.left = (ev.clientX - dx) + 'px'; w.style.top = (ev.clientY - dy) + 'px'; };
+            document.onmouseup = () => document.onmousemove = null;
+        }
+
+        // --- 8. Utilities ---
+        function liveCounter() {
+            let count = 1000000;
+            const el = document.getElementById('user-count');
+            setInterval(() => {
+                count += Math.floor(Math.random() * 50) - 20;
+                el.innerText = count.toLocaleString();
+            }, 2000);
+        }
 
         function updateClock() {
             const now = new Date();
-            document.getElementById('clock-time').innerText = now.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
-            document.getElementById('clock-date').innerText = now.toLocaleDateString('en-US');
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
             setTimeout(updateClock, 1000);
         }
 
     </script>
 </body>
 </html>
-
             
 
