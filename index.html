@@ -1,182 +1,507 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>HATIM SPACE OS | برمجة حاتم آيت أجو</title>
-<style>
-:root{
-  --primary:#00ff41; --secondary:#00d4ff; --bg:#050505; --panel:#111; --text:#eee; --glass:rgba(255,255,255,0.05);
-}
-*{box-sizing:border-box;font-family:'Cairo',sans-serif;}
-body,html{margin:0;padding:0;height:100vh;overflow:hidden;color:var(--text);background:var(--bg);}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HATIM SPACE OS | The Notion Killer</title>
+    <!-- خطوط عربية وأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00ff88;
+            --accent: #00d4ff;
+            --purple: #bc13fe;
+            --bg-dark: #050509;
+            --panel: rgba(20, 20, 25, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #ececf1;
+            --text-muted: #8e8ea0;
+            --glass: blur(20px) saturate(180%);
+        }
 
-/* خلفية نجوم */
-#stars{position:fixed;inset:0;z-index:-1;background:#000;overflow:hidden;}
-.star{position:absolute;background:white;border-radius:50%;animation:twinkle 5s infinite;}
-@keyframes twinkle{0%,100%{opacity:0.3;}50%{opacity:1;}}
+        * { box-sizing: border-box; outline: none; }
+        
+        body, html {
+            margin: 0; padding: 0;
+            height: 100vh;
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+        }
 
-/* شاشة الدخول */
-#login-screen{position:fixed;inset:0;z-index:9999;display:flex;justify-content:center;align-items:center;transition:0.5s;}
-.login-card{background:var(--glass);backdrop-filter:blur(25px);padding:60px;border-radius:40px;border:1px solid rgba(0,255,65,0.2);width:450px;text-align:center;box-shadow:0 0 100px rgba(0,255,65,0.2);}
-.dev-badge{color:var(--primary);font-weight:bold;letter-spacing:2px;margin-bottom:20px;display:block;}
-.main-logo{font-size:3.5rem;font-weight:900;background:linear-gradient(45deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:30px;}
-.login-card input{width:100%;padding:15px;margin-bottom:20px;background:#000;border:1px solid #333;color:white;border-radius:12px;outline:none;}
-.login-card button{width:100%;padding:18px;font-weight:900;color:black;background:var(--primary);border:none;border-radius:12px;cursor:pointer;transition:0.3s;}
-.login-card button:hover{transform:scale(1.05);}
+        /* --- خلفية الكون المتحركة --- */
+        #universe {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000 100%);
+            overflow: hidden;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: 0.4;
+            animation: float 20s infinite alternate;
+        }
+        @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(50px, 50px); } }
 
-/* واجهة التطبيق */
-#app-interface{display:none;flex-direction:column;height:100vh;}
-.top-bar{background:var(--panel);padding:10px 25px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #222;gap:10px;}
-.btn{background:#222; border:1px solid #444; color:white; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:13px; transition:0.3s;}
-.btn:hover{background:var(--primary); color:black; transform:translateY(-2px); box-shadow:0 5px 15px rgba(0,255,65,0.3);}
+        /* --- شاشة الدخول الأسطورية --- */
+        #login-gate {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(30px);
+            transition: opacity 0.8s ease;
+        }
+        .gate-card {
+            width: 500px; padding: 60px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 0 100px rgba(0, 255, 136, 0.15);
+            position: relative; overflow: hidden;
+        }
+        .gate-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--purple));
+        }
+        .h-logo {
+            font-size: 4rem; font-weight: 900; margin: 0;
+            background: linear-gradient(135deg, #fff 30%, var(--primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+        .h-sub { color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem; }
+        
+        .input-group { position: relative; margin-bottom: 25px; }
+        .input-group i { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); color: var(--primary); }
+        .gate-input {
+            width: 100%; padding: 18px 50px 18px 20px;
+            background: rgba(0,0,0,0.5); border: 1px solid #333;
+            border-radius: 12px; color: white; font-size: 1.1rem;
+            transition: 0.3s;
+        }
+        .gate-input:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(0,255,136,0.2); }
+        
+        .gate-btn {
+            width: 100%; padding: 18px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border: none; border-radius: 12px;
+            color: black; font-weight: 800; font-size: 1.2rem;
+            cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .gate-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,255,136,0.3); }
 
-/* مساحة العمل */
-.workspace{display:flex;flex:1;overflow:hidden;}
-.ai-chat-side{width:350px;background:var(--panel);border-left:1px solid #222;display:flex;flex-direction:column;}
-#chat-flow{flex:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
-.bubble{padding:12px;border-radius:12px;max-width:85%;font-size:14px;}
-.bubble.ai{background:var(--primary);color:black;align-self:flex-start;font-weight:bold;}
-.bubble.user{background:#333;color:white;align-self:flex-end;}
+        /* --- واجهة النظام --- */
+        #os-interface { display: none; height: 100vh; flex-direction: row; opacity: 0; transition: opacity 1s; }
+        
+        /* القائمة الجانبية */
+        .sidebar {
+            width: 280px; background: var(--panel);
+            border-left: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(40px);
+        }
+        .user-profile {
+            display: flex; align-items: center; gap: 15px;
+            padding-bottom: 20px; border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .avatar {
+            width: 45px; height: 45px; border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary), var(--purple));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: black; font-size: 1.2rem;
+        }
+        .menu-item {
+            padding: 12px; border-radius: 8px;
+            color: var(--text-muted); cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+            transition: 0.2s; font-size: 0.95rem;
+        }
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255,255,255,0.05); color: white;
+        }
+        .menu-item i { width: 20px; text-align: center; }
 
-.editor-side{flex:1;padding:40px;overflow-y:auto;background:rgba(0,0,0,0.5);position:relative;}
-#paper{width:100%;max-width:850px;min-height:1100px;margin:auto;padding:40px;background:white;color:#111;border-radius:8px;outline:none;font-size:18px;line-height:1.8;box-shadow:0 0 50px rgba(0,0,0,0.5);}
+        /* منطقة العمل الرئيسية */
+        .main-stage {
+            flex: 1; display: flex; flex-direction: column;
+            position: relative;
+            background: rgba(0,0,0,0.2);
+        }
 
-/* قائمة السلاش */
-#slash-menu{position:absolute;width:240px;background:#1a1a1a;border:1px solid var(--primary);border-radius:12px;display:none;z-index:1000;padding:8px;}
-.s-item{padding:10px;cursor:pointer;color:white;border-radius:8px;font-size:14px;display:flex;align-items:center;gap:10px;}
-.s-item:hover{background:var(--primary);color:black;font-weight:bold;}
+        .header {
+            padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .page-title {
+            font-size: 2.5rem; font-weight: 800; border: none; background: transparent;
+            color: white; width: 100%;
+        }
+        .status-badge {
+            background: rgba(0,255,136,0.1); color: var(--primary);
+            padding: 5px 15px; border-radius: 20px; font-size: 0.8rem;
+            border: 1px solid rgba(0,255,136,0.2);
+        }
 
-.signature-footer{position:fixed;bottom:10px;left:20px;font-size:12px;color:#666;z-index:1000;}
-.signature-footer span{color:var(--primary);font-weight:bold;}
-</style>
+        /* المحرر الشبيه بـ Notion */
+        .editor-container {
+            flex: 1; padding: 0 15% 50px 15%;
+            overflow-y: auto; scroll-behavior: smooth;
+        }
+        
+        .block {
+            position: relative; padding: 5px 10px;
+            margin-bottom: 8px; border-radius: 6px;
+            transition: background 0.2s;
+            line-height: 1.6;
+        }
+        .block:hover { background: rgba(255,255,255,0.02); }
+        .block:focus { background: rgba(255,255,255,0.04); }
+        
+        /* القائمة العائمة (Slash Menu) */
+        #slash-cmd {
+            position: absolute; width: 220px;
+            background: #1a1a1a; border: 1px solid #333;
+            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: none; z-index: 100; overflow: hidden;
+            animation: slideUp 0.2s ease;
+        }
+        @keyframes slideUp { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+        
+        .cmd-item {
+            padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+            color: #ccc; border-bottom: 1px solid #222;
+        }
+        .cmd-item:hover { background: var(--primary); color: black; }
+        .cmd-item i { font-size: 1.1rem; }
+
+        /* مكونات خاصة */
+        .kanban-board {
+            display: flex; gap: 15px; overflow-x: auto; padding: 20px 0;
+        }
+        .kanban-col {
+            min-width: 250px; background: #111; border-radius: 8px; padding: 15px;
+            border: 1px solid #333;
+        }
+        .k-card {
+            background: #222; padding: 10px; margin-bottom: 10px; border-radius: 6px;
+            cursor: grab; border: 1px solid #444; font-size: 0.9rem;
+        }
+        
+        .todo-item { display: flex; align-items: center; gap: 10px; }
+        .todo-check { accent-color: var(--primary); width: 18px; height: 18px; cursor: pointer; }
+        .todo-checked { text-decoration: line-through; color: var(--text-muted); }
+
+        /* الذكاء الاصطناعي الجانبي */
+        .ai-panel {
+            width: 300px; background: var(--panel);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            transform: translateX(100%);
+            position: absolute; right: 0; top: 0; bottom: 0;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(40px); z-index: 50;
+        }
+        .ai-panel.open { transform: translateX(0); }
+        .ai-header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        .chat-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        
+        .msg { padding: 12px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; max-width: 90%; }
+        .msg.user { background: #333; align-self: flex-start; color: white; border-bottom-right-radius: 2px; }
+        .msg.ai { background: rgba(0, 255, 136, 0.15); border: 1px solid var(--primary); align-self: flex-end; color: #fff; border-bottom-left-radius: 2px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* Notification */
+        #toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: black; padding: 10px 25px;
+            border-radius: 30px; font-weight: bold; opacity: 0; transition: 0.5s;
+            pointer-events: none; box-shadow: 0 5px 20px rgba(0,255,136,0.4);
+        }
+
+    </style>
 </head>
 <body>
-<div id="stars"></div>
 
-<!-- شاشة الدخول -->
-<div id="login-screen">
-  <div class="login-card">
-    <span class="dev-badge">برمج من طرف حاتم آيت أجو</span>
-    <div class="main-logo">HATIM SPACE</div>
-    <input type="text" id="captain-name" placeholder="اسم القائد الأسطوري...">
-    <button onclick="launchOS()">تشغيل النظام الأسطوري 🚀</button>
-  </div>
-</div>
-
-<!-- واجهة التطبيق -->
-<div id="app-interface">
-<header class="top-bar">
-  <div style="font-weight:900;color:var(--primary);">HATIM SPACE OS | برمجة حاتم آيت أجو</div>
-  <div>
-    <button class="btn" onclick="execCmd('bold')">B</button>
-    <button class="btn" onclick="execCmd('italic')">I</button>
-    <button class="btn" onclick="execCmd('underline')">U</button>
-    <button class="btn" onclick="insTable()">📊 جدول</button>
-    <button class="btn" onclick="insSlide()">🖼️ شريحة</button>
-    <button class="btn" onclick="downloadHTML()">⬇️ تحميل</button>
-    <button class="btn" onclick="uploadBG()">🖼️ خلفية مخصصة</button>
-  </div>
-  <button class="btn" style="background:#ff4d4d;" onclick="location.reload()">خروج</button>
-</header>
-
-<div class="workspace">
-  <div class="ai-chat-side">
-    <div style="padding:15px; border-bottom:1px solid #222; color:var(--primary); font-weight:bold;">🤖 HATIM AI ENGINE</div>
-    <div id="chat-flow"></div>
-    <div style="padding:15px;">
-      <input type="text" id="ai-in" placeholder="دردش مع الذكاء..." onkeypress="if(event.key==='Enter')aiChat()" style="width:100%; padding:10px; background:#000; color:white; border:1px solid #333; border-radius:8px;">
+    <!-- خلفية -->
+    <div id="universe">
+        <div class="orb" style="width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px;"></div>
+        <div class="orb" style="width: 300px; height: 300px; background: var(--purple); bottom: -50px; right: -50px;"></div>
     </div>
-  </div>
 
-  <div class="editor-side">
-    <div id="paper" contenteditable="true" spellcheck="false">
-      <h1 style="text-align:center;">إبداع جديد بقلم حاتم آيت أجو ✍️</h1>
-      <p>اكتب <b>/</b> لتشغيل القوى الخارقة للذكاء الاصطناعي...</p>
+    <!-- تسجيل الدخول -->
+    <div id="login-gate">
+        <div class="gate-card">
+            <h1 class="h-logo">HATIM OS</h1>
+            <p class="h-sub">نظام التشغيل الكوني لإدارة حياتك</p>
+            
+            <div class="input-group">
+                <i class="fas fa-user-astronaut"></i>
+                <input type="text" id="username" class="gate-input" placeholder="اسم القائد..." autocomplete="off">
+            </div>
+            
+            <button class="gate-btn" onclick="enterSystem()">إطلاق النظام <i class="fas fa-rocket" style="margin-right:10px;"></i></button>
+        </div>
     </div>
-    <div id="slash-menu">
-      <div class="s-item" onclick="aiWrite('story')">📖 AI: تأليف قصة أسطورية</div>
-      <div class="s-item" onclick="aiWrite('code')">💻 AI: إنشاء كود برمجى</div>
-      <div class="s-item" onclick="insTable()">📊 إدراج جدول بيانات</div>
+
+    <!-- الواجهة الرئيسية -->
+    <div id="os-interface">
+        
+        <!-- القائمة الجانبية -->
+        <nav class="sidebar">
+            <div class="user-profile">
+                <div class="avatar" id="u-initial">H</div>
+                <div>
+                    <div style="font-weight:bold; font-size:1.1rem;" id="u-name-disp">Hatim</div>
+                    <div style="font-size:0.8rem; color:var(--primary);">نسخة البرو ⚡</div>
+                </div>
+            </div>
+
+            <div class="menu-item active" onclick="loadPage('home')"><i class="fas fa-home"></i> الصفحة الرئيسية</div>
+            <div class="menu-item" onclick="loadPage('second-brain')"><i class="fas fa-brain"></i> العقل الثاني</div>
+            <div class="menu-item" onclick="loadPage('projects')"><i class="fas fa-tasks"></i> المشاريع</div>
+            <div style="margin-top: auto; border-top: 1px solid #333; padding-top: 20px;">
+                <div class="menu-item" onclick="toggleAI()"><i class="fas fa-robot" style="color:var(--accent)"></i> مساعد حاتم الذكي</div>
+                <div class="menu-item" onclick="saveWork()"><i class="fas fa-save"></i> حفظ العمل يدوياً</div>
+            </div>
+        </nav>
+
+        <!-- المحرر -->
+        <main class="main-stage">
+            <div class="header">
+                <div class="status-badge"><i class="fas fa-check-circle"></i> تم الحفظ تلقائياً</div>
+                <div>
+                    <button class="gate-btn" style="padding: 8px 20px; font-size:0.9rem; width:auto;" onclick="exportDoc()">تصدير HTML</button>
+                </div>
+            </div>
+
+            <div class="editor-container" id="editor">
+                <input type="text" class="page-title" value="أهلاً بك في مساحتك الخاصة 🚀" placeholder="عنوان الصفحة...">
+                <!-- الكتل تبدأ هنا -->
+                <div class="block" contenteditable="true" placeholder="اكتب '/' للأوامر...">اضغط هنا وابدأ الكتابة...</div>
+            </div>
+        </main>
+
+        <!-- لوحة الذكاء الاصطناعي -->
+        <aside class="ai-panel" id="ai-panel">
+            <div class="ai-header">
+                <span style="font-weight:bold; color:var(--accent)">🤖 Hatim AI Core</span>
+                <i class="fas fa-times" style="cursor:pointer;" onclick="toggleAI()"></i>
+            </div>
+            <div class="chat-area" id="chat-feed">
+                <div class="msg ai">مرحباً أيها القائد. أنا عقلك الرقمي. كيف أساعدك في تنظيم أفكارك اليوم؟</div>
+            </div>
+            <div style="padding: 15px;">
+                <input type="text" id="ai-input" class="gate-input" style="padding: 10px;" placeholder="اطلب مني شيئاً..." onkeypress="if(event.key==='Enter') sendAI()">
+            </div>
+        </aside>
+
     </div>
-  </div>
-</div>
-</div>
 
-<div class="signature-footer">برمج من طرف <span>حاتم آيت أجو</span> | 2026</div>
+    <!-- قائمة السلاش -->
+    <div id="slash-cmd">
+        <div class="cmd-item" onclick="addBlock('h1')"><i class="fas fa-heading"></i> عنوان كبير</div>
+        <div class="cmd-item" onclick="addBlock('h2')"><i class="fas fa-heading" style="font-size:0.9rem"></i> عنوان متوسط</div>
+        <div class="cmd-item" onclick="addBlock('todo')"><i class="fas fa-check-square"></i> قائمة مهام</div>
+        <div class="cmd-item" onclick="addBlock('code')"><i class="fas fa-code"></i> كود برمجي</div>
+        <div class="cmd-item" onclick="addBlock('kanban')"><i class="fas fa-columns"></i> لوحة كانبان</div>
+        <div class="cmd-item" onclick="addBlock('callout')"><i class="fas fa-lightbulb"></i> ملاحظة مميزة</div>
+    </div>
 
-<script>
-// النجوم
-const starContainer = document.getElementById('stars');
-for(let i=0;i<120;i++){
-  const s = document.createElement('div');
-  s.className='star';
-  let size = Math.random()*3;
-  s.style.width = size+'px';
-  s.style.height = size+'px';
-  s.style.top = Math.random()*100+'%';
-  s.style.left = Math.random()*100+'%';
-  starContainer.appendChild(s);
-}
+    <div id="toast">تم الحفظ بنجاح! 💾</div>
 
-// تشغيل النظام
-function launchOS(){
-  const name = document.getElementById('captain-name').value;
-  if(!name){ alert("يرجى إدخال اسمك!"); return;}
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app-interface').style.display='flex';
-}
+    <script>
+        // --- 1. System Core ---
+        let currentUser = localStorage.getItem('hatim_user') || '';
+        
+        function enterSystem() {
+            const input = document.getElementById('username');
+            if(!input.value) return;
+            currentUser = input.value;
+            localStorage.setItem('hatim_user', currentUser);
+            
+            document.getElementById('u-name-disp').innerText = currentUser;
+            document.getElementById('u-initial').innerText = currentUser.charAt(0).toUpperCase();
+            
+            // Animation
+            const gate = document.getElementById('login-gate');
+            gate.style.opacity = '0';
+            setTimeout(() => {
+                gate.style.display = 'none';
+                const os = document.getElementById('os-interface');
+                os.style.display = 'flex';
+                // Trigger reflow
+                void os.offsetWidth;
+                os.style.opacity = '1';
+                loadWork();
+            }, 800);
+        }
 
-// أوامر محرر
-function execCmd(cmd){ document.execCommand(cmd); }
-function aiChat(){
-  const input = document.getElementById('ai-in');
-  if(!input.value) return;
-  const flow = document.getElementById('chat-flow');
-  flow.innerHTML += `<div class="bubble user">${input.value}</div>`;
-  setTimeout(()=>{ flow.innerHTML += `<div class="bubble ai">ذكاء حاتم: جاري التحليل والتنفيذ!</div>`; flow.scrollTop = flow.scrollHeight; },600);
-  input.value='';
-}
-function aiWrite(type){
-  const paper = document.getElementById('paper');
-  let content = type==='story'? "في عالم مدهش، حاتم يقود ثورة البرمجة..." : "console.log('Hello from HATIM AI');";
-  document.execCommand('insertHTML', `<span style="color:var(--primary)">${content}</span>`);
-  document.getElementById('slash-menu').style.display='none';
-}
-function insTable(){
-  document.execCommand('insertHTML', `<table border="1" style="width:100%;border-collapse:collapse;"><tr><td>عنوان</td><td>قيمة</td></tr></table>`);
-  document.getElementById('slash-menu').style.display='none';
-}
-function insSlide(){
-  document.execCommand('insertHTML', `<div style="background:#111;color:white;padding:40px;border-radius:15px;text-align:center;"><h2>شريحة أسطورية</h2></div>`);
-}
+        // --- 2. Editor Logic (The Notion Feel) ---
+        const editor = document.getElementById('editor');
+        const slashMenu = document.getElementById('slash-cmd');
+        let currentBlock = null;
 
-// تحميل المحتوى
-function downloadHTML(){
-  const paper = document.getElementById('paper');
-  const blob = new Blob([paper.innerHTML],{type:'text/html'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download='hatim-content.html'; a.click(); URL.revokeObjectURL(url);
-}
+        // Auto Save Loop
+        setInterval(() => {
+            saveWork(true);
+        }, 5000);
 
-// تغيير الخلفية
-function uploadBG(){
-  const url = prompt("أدخل رابط الخلفية:");
-  if(url) document.body.style.backgroundImage=`url('${url}')`;
-}
+        editor.addEventListener('keyup', (e) => {
+            if (e.key === '/') {
+                const sel = window.getSelection();
+                if(sel.rangeCount > 0) {
+                    const range = sel.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+                    currentBlock = e.target;
+                    showSlashMenu(rect.left, rect.bottom + 10);
+                }
+            } else {
+                slashMenu.style.display = 'none';
+            }
+            
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                // Create new block instead of div
+                document.execCommand('insertHTML', false, '<div class="block" contenteditable="true"></div>');
+            }
+        });
 
-// قائمة السلاش
-const paperEl = document.getElementById('paper');
-const sMenu = document.getElementById('slash-menu');
-paperEl.addEventListener('keyup',(e)=>{
-  const sel = window.getSelection();
-  if(sel.rangeCount>0 && sel.getRangeAt(0).startContainer.textContent.endsWith('/')){
-    const rect = sel.getRangeAt(0).getBoundingClientRect();
-    sMenu.style.display='block';
-    sMenu.style.top=(rect.bottom+window.scrollY)+'px';
-    sMenu.style.left=rect.left+'px';
-  } else sMenu.style.display='none';
-});
-</script>
+        function showSlashMenu(x, y) {
+            slashMenu.style.left = x + 'px';
+            slashMenu.style.top = y + 'px';
+            slashMenu.style.display = 'block';
+        }
+
+        function addBlock(type) {
+            slashMenu.style.display = 'none';
+            // Remove the '/'
+            document.execCommand('delete');
+
+            let html = '';
+            switch(type) {
+                case 'h1': html = '<h1 class="block" contenteditable="true">عنوان رئيسي</h1>'; break;
+                case 'h2': html = '<h2 class="block" contenteditable="true">عنوان فرعي</h2>'; break;
+                case 'todo': html = '<div class="block todo-item" contenteditable="false"><input type="checkbox" class="todo-check" onclick="toggleTodo(this)"><span contenteditable="true">مهمة جديدة</span></div>'; break;
+                case 'code': html = '<div class="block" style="background:#222; font-family:monospace; padding:15px; border-radius:8px; color:#00ff88;" contenteditable="true">// اكتب الكود هنا...</div>'; break;
+                case 'callout': html = '<div class="block" style="background:rgba(0,212,255,0.1); border-left:4px solid var(--accent); padding:15px;" contenteditable="true">💡 فكرة رائعة...</div>'; break;
+                case 'kanban': 
+                    html = `
+                    <div class="block kanban-board" contenteditable="false">
+                        <div class="kanban-col">
+                            <h4 style="margin-top:0; color:#888;">للقيام به</h4>
+                            <div class="k-card" contenteditable="true">مهمة 1</div>
+                            <div class="k-card" contenteditable="true">مهمة 2</div>
+                        </div>
+                        <div class="kanban-col">
+                            <h4 style="margin-top:0; color:var(--accent);">جاري العمل</h4>
+                            <div class="k-card" contenteditable="true">تطوير النظام</div>
+                        </div>
+                        <div class="kanban-col">
+                            <h4 style="margin-top:0; color:var(--primary);">مكتمل</h4>
+                            <div class="k-card" contenteditable="true">التصميم الأولي</div>
+                        </div>
+                    </div>`;
+                    break;
+            }
+            
+            if(html) document.execCommand('insertHTML', false, html);
+        }
+
+        function toggleTodo(cb) {
+            const span = cb.nextElementSibling;
+            if(cb.checked) span.classList.add('todo-checked');
+            else span.classList.remove('todo-checked');
+        }
+
+        // --- 3. Persistence (Local Storage) ---
+        function saveWork(silent = false) {
+            const content = editor.innerHTML;
+            localStorage.setItem('hatim_space_content', content);
+            if(!silent) showToast();
+        }
+
+        function loadWork() {
+            const saved = localStorage.getItem('hatim_space_content');
+            if(saved) editor.innerHTML = saved;
+            else if(currentUser) document.getElementById('username').value = currentUser;
+        }
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.style.opacity = '1';
+            t.style.bottom = '40px';
+            setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.bottom = '30px';
+            }, 2000);
+        }
+
+        // --- 4. AI Engine Simulation ---
+        function toggleAI() {
+            document.getElementById('ai-panel').classList.toggle('open');
+        }
+
+        function sendAI() {
+            const input = document.getElementById('ai-input');
+            const feed = document.getElementById('chat-feed');
+            const text = input.value;
+            if(!text) return;
+
+            // User msg
+            feed.innerHTML += `<div class="msg user">${text}</div>`;
+            input.value = '';
+            feed.scrollTop = feed.scrollHeight;
+
+            // AI Logic
+            setTimeout(() => {
+                const responses = [
+                    "أقوم بتحليل بياناتك... فكرة ممتازة!",
+                    "لقد قمت بإضافة هذا إلى قائمة مهامك الذهنية.",
+                    "هل تريد مني إنشاء جدول زمني لهذا؟",
+                    "نظام حاتم يوافق على هذا الإجراء.",
+                    "جارٍ تحسين الكود... تم بنسبة 100%."
+                ];
+                const reply = responses[Math.floor(Math.random() * responses.length)];
+                
+                // Typing effect
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'msg ai';
+                feed.appendChild(msgDiv);
+                
+                let i = 0;
+                const typer = setInterval(() => {
+                    msgDiv.textContent += reply.charAt(i);
+                    i++;
+                    feed.scrollTop = feed.scrollHeight;
+                    if(i >= reply.length) clearInterval(typer);
+                }, 30);
+
+            }, 800);
+        }
+        
+        // Export
+        function exportDoc() {
+            const blob = new Blob([document.documentElement.outerHTML], {type: 'text/html'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Hatim_Space_OS.html';
+            a.click();
+        }
+
+        // Check login on load
+        if(localStorage.getItem('hatim_user')) {
+             document.getElementById('username').value = localStorage.getItem('hatim_user');
+        }
+
+    </script>
 </body>
 </html>
