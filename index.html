@@ -1,102 +1,94 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZENITH OS ULTRA | Global Edition</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
-    <meta name="theme-color" content="#000000">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ZENITH OS ULTRA | The Future</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --primary: #00d2ff;
-            --secondary: #3a7bd5;
-            --accent: #f80759;
-            --glass-bg: rgba(20, 20, 30, 0.75);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
-            --blur: blur(25px);
-            --font: 'Tajawal', sans-serif;
-            --shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;ZENITH ULTRA&quot;,&quot;short_name&quot;:&quot;ZENITH&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#000000&quot;,&quot;theme_color&quot;:&quot;#000000&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;https://cdn-icons-png.flaticon.com/512/3665/3665939.png&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/png&quot;}]}">
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font); user-select: none; -webkit-tap-highlight-color: transparent; }
-        body { background: #000; height: 100vh; overflow: hidden; color: #fff; }
+<style>
+:root {
+    --primary: #00d2ff;
+    --secondary: #3a7bd5;
+    --accent: #f80759;
+    --glass-bg: rgba(20, 20, 30, 0.65);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --blur: blur(25px);
+    --font: 'Tajawal', sans-serif;
+    --shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font); user-select: none; -webkit-tap-highlight-color: transparent; }
+body { background: #000; height: 100vh; overflow: hidden; color: #fff; }
 
-        /* --- Boot Screen --- */
-        #boot-screen {
-            position: fixed; inset: 0; background: #000; z-index: 99999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 1s;
-        }
-        .loader { width: 200px; height: 4px; background: #333; margin-top: 20px; border-radius: 2px; overflow: hidden; }
-        .bar { width: 0%; height: 100%; background: var(--primary); transition: 2s; }
+/* --- BACKGROUND --- */
+#wallpaper {
+    position: fixed; inset: 0; z-index: -1;
+    background: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2072') center/cover;
+    transition: 0.5s;
+}
+#wallpaper::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.3); }
 
-        /* --- UI Elements --- */
-        #wallpaper { position: fixed; inset: 0; z-index: -1; background: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2072') center/cover; transition: 0.5s; }
-        #wallpaper::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.3); }
+/* --- TOP BAR --- */
+#topbar { height: 35px; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-size: 0.85rem; font-weight: bold; z-index: 5000; border-bottom: var(--glass-border); }
 
-        #topbar { height: 35px; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-size: 0.85rem; font-weight: bold; z-index: 5000; border-bottom: var(--glass-border); }
+/* --- DESKTOP & WIDGETS --- */
+#desktop { position: absolute; inset: 0; top: 35px; bottom: 80px; padding: 20px; display: flex; gap: 20px; }
+.icon-grid { display: flex; flex-direction: column; flex-wrap: wrap; gap: 15px; height: 100%; align-content: flex-start; }
 
-        #desktop { position: absolute; inset: 0; top: 35px; bottom: 80px; padding: 20px; display: flex; gap: 20px; }
-        .icon-grid { display: flex; flex-direction: column; flex-wrap: wrap; gap: 15px; height: 100%; align-content: flex-start; }
-        
-        .app-icon { width: 85px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.2s; text-shadow: 0 2px 4px black; border-radius: 10px; padding: 5px; }
-        .app-icon:hover { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); }
-        .icon-box { width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.01)); border: var(--glass-border); box-shadow: 0 5px 15px rgba(0,0,0,0.3); margin-bottom: 5px; }
+.app-icon { width: 85px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.2s; text-shadow: 0 2px 4px black; border-radius: 10px; padding: 5px; }
+.app-icon:hover { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); }
+.icon-box { width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.01)); border: var(--glass-border); box-shadow: 0 5px 15px rgba(0,0,0,0.3); margin-bottom: 5px; }
 
-        .widget-area { margin-right: auto; width: 300px; display: flex; flex-direction: column; gap: 15px; }
-        .widget { background: var(--glass-bg); backdrop-filter: var(--blur); border-radius: 20px; padding: 20px; border: var(--glass-border); box-shadow: var(--shadow); transition: 0.3s; }
-        .widget:hover { transform: scale(1.02); }
+.widget-area { margin-right: auto; width: 300px; display: flex; flex-direction: column; gap: 15px; }
+.widget { background: var(--glass-bg); backdrop-filter: var(--blur); border-radius: 20px; padding: 20px; border: var(--glass-border); box-shadow: var(--shadow); transition: 0.3s; }
+.widget:hover { transform: scale(1.02); }
 
-        #dock-container { position: fixed; bottom: 15px; left: 0; right: 0; display: flex; justify-content: center; z-index: 9000; }
-        #dock { background: rgba(20, 20, 30, 0.85); backdrop-filter: blur(30px); padding: 10px 20px; border-radius: 24px; border: var(--glass-border); display: flex; gap: 15px; align-items: flex-end; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .dock-item { width: 50px; height: 50px; border-radius: 14px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: 0.2s cubic-bezier(0.25, 1, 0.5, 1); position: relative; border-bottom: 2px solid transparent; }
-        .dock-item:hover { transform: translateY(-15px) scale(1.2); background: rgba(255,255,255,0.2); margin: 0 10px; }
-        .dock-item.active::after { content:''; position:absolute; bottom:-5px; width:5px; height:5px; background:var(--primary); border-radius:50%; }
+/* --- DOCK --- */
+#dock-container { position: fixed; bottom: 15px; left: 0; right: 0; display: flex; justify-content: center; z-index: 9000; }
+#dock { background: rgba(20, 20, 30, 0.75); backdrop-filter: blur(30px); padding: 10px 20px; border-radius: 24px; border: var(--glass-border); display: flex; gap: 15px; align-items: flex-end; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.dock-item { width: 50px; height: 50px; border-radius: 14px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: 0.2s cubic-bezier(0.25, 1, 0.5, 1); position: relative; border-bottom: 2px solid transparent; }
+.dock-item:hover { transform: translateY(-15px) scale(1.2); background: rgba(255,255,255,0.2); margin: 0 10px; }
+.dock-item.active::after { content:''; position:absolute; bottom:-5px; width:5px; height:5px; background:var(--primary); border-radius:50%; }
 
-        /* Window System */
-        .window { position: absolute; background: #121212; border-radius: 12px; border: 1px solid #333; display: flex; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.7); min-width: 350px; min-height: 250px; overflow: hidden; animation: popIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); resize: both; }
-        @keyframes popIn { from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
-        .win-head { height: 40px; background: #1c1c24; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; cursor: grab; border-bottom: 1px solid #333; }
-        .win-controls { display: flex; gap: 8px; }
-        .win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: 0.2s; }
-        .close { background: #ff5f57; } .close:hover { filter: brightness(0.8); }
-        .min { background: #febc2e; }
-        .max { background: #28c840; }
-        .win-body { flex: 1; position: relative; overflow: hidden; background: #0e0e12; }
+/* --- WINDOWS --- */
+.window { position: absolute; background: #121212; border-radius: 12px; border: 1px solid #333; display: flex; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.7); min-width: 350px; min-height: 250px; overflow: hidden; animation: popIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); resize: both; }
+@keyframes popIn { from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
+.win-head { height: 40px; background: #1c1c24; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; cursor: grab; border-bottom: 1px solid #333; }
+.win-controls { display: flex; gap: 8px; }
+.win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: 0.2s; }
+.close { background: #ff5f57; } .close:hover { filter: brightness(0.8); }
+.min { background: #febc2e; }
+.max { background: #28c840; }
+.win-body { flex: 1; position: relative; overflow: hidden; background: #0e0e12; }
 
-        #start-menu { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(20px); width: 320px; background: rgba(20,20,30,0.95); backdrop-filter: blur(40px); border: var(--glass-border); border-radius: 20px; padding: 20px; display: none; flex-direction: column; gap: 15px; opacity: 0; transition: 0.3s; z-index: 8999; }
-        #start-menu.show { display: flex; transform: translateX(-50%) translateY(0); opacity: 1; }
-        .start-item { display: flex; align-items: center; gap: 15px; padding: 10px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
-        .start-item:hover { background: rgba(255,255,255,0.1); }
+/* --- START MENU --- */
+#start-menu { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(20px); width: 360px; background: rgba(20,20,30,0.95); backdrop-filter: blur(40px); border: var(--glass-border); border-radius: 20px; padding: 20px; display: none; flex-direction: column; gap: 15px; opacity: 0; transition: 0.3s; z-index: 8999; }
+#start-menu.show { display: flex; transform: translateX(-50%) translateY(0); opacity: 1; }
+.start-item { display: flex; align-items: center; gap: 15px; padding: 10px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+.start-item:hover { background: rgba(255,255,255,0.1); }
 
-        #toast { position: fixed; top: 50px; right: 20px; background: rgba(20,20,30,0.9); border-left: 4px solid var(--primary); padding: 15px; border-radius: 8px; transform: translateX(150%); transition: 0.5s; z-index: 9999; }
+/* --- TOAST --- */
+#toast { position: fixed; top: 50px; right: 20px; background: rgba(20,20,30,0.9); border-left: 4px solid var(--primary); padding: 15px; border-radius: 8px; transform: translateX(150%); transition: 0.5s; z-index: 9999; }
 
-        /* App Specific Styles */
-        .browser-bar { display: flex; gap: 10px; padding: 8px; background: #222; }
-        .url-in { flex: 1; background: #111; border: none; color: white; padding: 5px 10px; border-radius: 5px; }
-        .paint-tools { padding: 10px; background: #222; display: flex; gap: 10px; justify-content: center; }
-        .color-dot { width: 20px; height: 20px; border-radius: 50%; cursor: pointer; border: 2px solid #555; }
-        .color-dot.active { border-color: white; transform: scale(1.2); }
-        .term-box { background: #0c0c0c; color: #0f0; padding: 15px; font-family: monospace; height: 100%; overflow-y: auto; }
-        .term-in { background: transparent; border: none; color: #0f0; outline: none; width: 100%; font-family: monospace; }
-        
-        /* Game Styles */
-        .xo-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 200px; margin: 20px auto; }
-        .xo-cell { width: 60px; height: 60px; background: #222; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; border-radius: 5px; }
-        .xo-cell:hover { background: #333; }
+/* --- APP SPECIFIC --- */
+.browser-bar { display: flex; gap: 10px; padding: 8px; background: #222; }
+.url-in { flex: 1; background: #111; border: none; color: white; padding: 5px 10px; border-radius: 5px; }
 
-    </style>
+.paint-tools { padding: 10px; background: #222; display: flex; gap: 10px; justify-content: center; }
+.color-dot { width: 20px; height: 20px; border-radius: 50%; cursor: pointer; border: 2px solid #555; }
+.color-dot.active { border-color: white; transform: scale(1.2); }
+
+.term-box { background: #0c0c0c; color: #0f0; padding: 15px; font-family: monospace; height: 100%; overflow-y: auto; }
+.term-in { background: transparent; border: none; color: #0f0; outline: none; width: 100%; font-family: monospace; }
+
+textarea { width:100%; height:100%; background:#1a1a1a; color:white; border:none; padding:15px; outline:none; resize:none; }
+</style>
 </head>
 <body>
-
-<!-- Boot Screen -->
-<div id="boot-screen">
-    <h1 style="letter-spacing: 5px; margin-bottom: 20px; color: var(--primary);">ZENITH GLOBAL</h1>
-    <div class="loader"><div class="bar" id="load-bar"></div></div>
-    <div style="margin-top: 10px; font-size: 0.8rem; color: #aaa;">Connecting to Global Servers...</div>
-</div>
 
 <div id="wallpaper"></div>
 
@@ -104,7 +96,6 @@
     <div style="display:flex; gap:15px; align-items:center;">
         <i class="fab fa-battle-net" style="font-size:1.2rem; color:var(--primary);"></i>
         <span>ZENITH ULTRA</span>
-        <span style="font-size:0.7rem; color:#aaa; margin-right:10px;">Live Users: <span id="live-users" style="color:var(--primary)">1,024,300</span></span>
     </div>
     <div style="display:flex; gap:15px; align-items:center;">
         <i class="fas fa-wifi"></i>
@@ -119,7 +110,7 @@
         <div class="widget" style="background: linear-gradient(135deg, #FF9D6C, #BB4E75);">
             <h3><i class="fas fa-sun"></i> الطقس</h3>
             <h1 style="font-size:3rem; margin:10px 0;">24°</h1>
-            <p>الدار البيضاء، المغرب</p>
+            <p>مشمس، سماء صافية</p>
         </div>
         <div class="widget">
             <h3 style="color:var(--primary)">حالة النظام</h3>
@@ -155,209 +146,95 @@
     </div>
 </div>
 
-<div id="toast">مرحباً بك في ZENITH ULTRA GLOBAL 🌍</div>
+<div id="toast">مرحباً بك في ZENITH ULTRA</div>
 
 <script>
-// --- CORE SYSTEM ---
-const System = { 
-    zIndex: 100, 
-    apps: {
-        'files': { name: 'الملفات', icon: 'fas fa-folder', color: '#ffca28', type: 'files' },
-        'browser': { name: 'المتصفح', icon: 'fas fa-globe', color: '#00d2ff', type: 'web', url: 'https://bing.com' },
-        'store': { name: 'المتجر', icon: 'fas fa-store', color: '#f50057', type: 'store' },
-        'term': { name: 'Terminal', icon: 'fas fa-terminal', color: '#00e676', type: 'term' },
-        'paint': { name: 'الرسام', icon: 'fas fa-palette', color: '#d500f9', type: 'paint' },
-        'media': { name: 'ميديا', icon: 'fas fa-play-circle', color: '#ff3d00', type: 'iframe', url: 'https://www.youtube.com/embed/jfKfPfyJRdk' },
-        'notes': { name: 'الملاحظات', icon: 'fas fa-sticky-note', color: '#ffea00', type: 'notes' },
-        'settings': { name: 'الإعدادات', icon: 'fas fa-cog', color: '#b0bec5', type: 'settings' },
-        'games': { name: 'ألعاب', icon: 'fas fa-gamepad', color:'#ff5722', type:'games' }
+const System = {
+    zIndex:100,
+    apps:{
+        'files':{name:'الملفات',icon:'fas fa-folder',color:'#ffca28',type:'files'},
+        'browser':{name:'المتصفح',icon:'fas fa-globe',color:'#00d2ff',type:'web',url:'https://bing.com'},
+        'store':{name:'المتجر',icon:'fas fa-store',color:'#f50057',type:'store'},
+        'term':{name:'Terminal',icon:'fas fa-terminal',color:'#00e676',type:'term'},
+        'paint':{name:'الرسام',icon:'fas fa-palette',color:'#d500f9',type:'paint'},
+        'media':{name:'ميديا',icon:'fas fa-play-circle',color:'#ff3d00',type:'iframe',url:'https://www.youtube.com/embed/jfKfPfyJRdk'},
+        'notes':{name:'الملاحظات',icon:'fas fa-sticky-note',color:'#ffea00',type:'notes'},
+        'settings':{name:'الإعدادات',icon:'fas fa-cog',color:'#b0bec5',type:'settings'},
+        'ai-assist':{name:'AI Assistant',icon:'fas fa-robot',color:'#00ffc6',type:'iframe',url:'https://chat.openai.com/'},
+        'ai-art':{name:'AI Art',icon:'fas fa-image',color:'#ff00f5',type:'iframe',url:'https://openai.com/dall-e/'},
+        'ai-code':{name:'AI Code Helper',icon:'fas fa-code',color:'#f5a700',type:'iframe',url:'https://replit.com/'}
     },
-
-    init: function(){
-        this.renderUI(); 
-        this.startTime(); 
-        this.bootSim();
-        this.liveUsers();
+    init:function(){
+        this.renderUI();
+        this.startTime();
+        this.showToast('تم تحميل النظام بنجاح 🚀');
     },
-
-    bootSim: function() {
-        setTimeout(() => document.getElementById('load-bar').style.width = '100%', 100);
-        setTimeout(() => {
-            document.getElementById('boot-screen').style.opacity = '0';
-            setTimeout(() => document.getElementById('boot-screen').style.display = 'none', 1000);
-            this.showToast('تم الاتصال بالخادم العالمي ✅');
-        }, 2500);
-    },
-
-    liveUsers: function() {
-        const el = document.getElementById('live-users');
-        let count = 1024300;
-        setInterval(() => {
-            count += Math.floor(Math.random() * 50) - 20;
-            el.innerText = count.toLocaleString();
-        }, 2000);
-    },
-
     renderUI:function(){
-        const icons=document.getElementById('icons'); 
-        const dock=document.getElementById('dock-apps'); 
-        const start=document.getElementById('start-list'); 
-        
+        const icons=document.getElementById('icons');
+        const dock=document.getElementById('dock-apps');
+        const start=document.getElementById('start-list');
         Object.keys(this.apps).forEach(key=>{
-            const app=this.apps[key]; 
-            icons.innerHTML+=`<div class="app-icon" onclick="WindowManager.open('${key}')"><div class="icon-box"><i class="${app.icon}" style="color:${app.color}"></i></div><span>${app.name}</span></div>`; 
-            if(['files','browser','store','term','paint','games'].includes(key)){
+            const app=this.apps[key];
+            icons.innerHTML+=`<div class="app-icon" onclick="WindowManager.open('${key}')"><div class="icon-box"><i class="${app.icon}" style="color:${app.color}"></i></div><span>${app.name}</span></div>`;
+            if(['files','browser','store','term','paint','ai-assist'].includes(key)){
                 dock.innerHTML+=`<div class="dock-item" id="dock-${key}" onclick="WindowManager.open('${key}')"><i class="${app.icon}" style="color:${app.color}"></i></div>`;
-            } 
+            }
             start.innerHTML+=`<div class="start-item" onclick="WindowManager.open('${key}'); toggleStart()"><i class="${app.icon}" style="color:${app.color}; width:25px;"></i><span>${app.name}</span></div>`;
         });
     },
-
-    startTime:function(){setInterval(()=>{document.getElementById('clock').innerText=new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})},1000);},
-
+    startTime:function(){setInterval(()=>document.getElementById('clock').innerText=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),1000);},
     showToast:function(msg){const t=document.getElementById('toast'); t.innerText=msg; t.style.transform='translateX(0)'; setTimeout(()=>t.style.transform='translateX(150%)',3000);}
 };
 
-// --- WINDOW MANAGER ---
-const WindowManager = {
-
+const WindowManager={
     open:function(key){
-        const app=System.apps[key]; 
-        const wid='win-'+Date.now(); 
-        const win=document.createElement('div'); 
-        win.className='window'; win.id=wid; win.style.zIndex=++System.zIndex; 
-        win.style.left=(50+Math.random()*50)+'px'; win.style.top=(50+Math.random()*50)+'px'; 
-        win.style.width='700px'; win.style.height='500px'; 
-        
-        win.innerHTML=`
-            <div class="win-head" onmousedown="WindowManager.drag(event, '${wid}')">
-                <div class="win-controls">
-                    <div class="win-dot close" onclick="WindowManager.close('${wid}')"></div>
-                    <div class="win-dot min" onclick="document.getElementById('${wid}').style.display='none'"></div>
-                    <div class="win-dot max" onclick="WindowManager.max('${wid}')"></div>
-                </div>
-                <div style="font-weight:500;">${app.name}</div>
-                <div style="width:50px;"></div>
-            </div>
-            <div class="win-body">${this.getContent(app,wid)}</div>`; 
-            
-        win.onmousedown=()=>win.style.zIndex=++System.zIndex; 
-        document.getElementById('win-layer').appendChild(win); 
-        
-        const di=document.getElementById('dock-'+key); 
-        if(di){di.classList.add('active'); di.style.transform='translateY(-10px)'; setTimeout(()=>di.style.transform='translateY(0)',300);} 
-        
-        if(app.type==='paint') this.initPaint(wid); 
-        if(app.type==='term') this.initTerm(wid); 
+        const app=System.apps[key];
+        const wid='win-'+Date.now();
+        const win=document.createElement('div');
+        win.className='window';
+        win.id=wid;
+        win.style.zIndex=++System.zIndex;
+        win.style.left=(50+Math.random()*50)+'px';
+        win.style.top=(50+Math.random()*50)+'px';
+        win.style.width='700px'; win.style.height='500px';
+        win.innerHTML=`<div class="win-head" onmousedown="WindowManager.drag(event,'${wid}')"><div class="win-controls"><div class="win-dot close" onclick="WindowManager.close('${wid}')"></div><div class="win-dot min" onclick="document.getElementById('${wid}').style.display='none'"></div><div class="win-dot max" onclick="WindowManager.max('${wid}')"></div></div><div style="font-weight:500;">${app.name}</div><div style="width:50px;"></div></div><div class="win-body">${this.getContent(app,wid)}</div>`;
+        win.onmousedown=()=>win.style.zIndex=++System.zIndex;
+        document.getElementById('win-layer').appendChild(win);
     },
-
-    close:function(wid){document.getElementById(wid).remove();},
-
-    max:function(wid){
-        const w=document.getElementById(wid); 
-        if(w.style.width==='100%'){
-            w.style.width='700px'; w.style.height='500px'; w.style.top='50px'; w.style.left='50px'; w.style.borderRadius='12px';
-        } else {
-            w.style.width='100%'; w.style.height='calc(100% - 35px)'; w.style.top='35px'; w.style.left='0'; w.style.borderRadius='0';
-        }
+    getContent:function(app,id){
+        if(app.type=='iframe') return `<iframe src="${app.url}" style="width:100%;height:100%;border:none;"></iframe>`;
+        if(app.type=='paint') return `<canvas id="paint-${id}" style="width:100%;height:100%;background:#111;"></canvas>`;
+        if(app.type=='notes') return `<textarea placeholder="اكتب ملاحظاتك هنا..."></textarea>`;
+        if(app.type=='term') return `<div class="term-box" id="term-${id}">ZENITH TERMINAL READY&gt; </div><input class="term-in" id="term-in-${id}" placeholder="أدخل أوامر..." onkeydown="if(event.key==='Enter'){WindowManager.termInput('${id}');}">`;
+        return `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;">${app.name}</div>`;
     },
-
-    drag:function(e,wid){
-        const w=document.getElementById(wid);
-        const dx=e.clientX-w.offsetLeft;
-        const dy=e.clientY-w.offsetTop;
-        const mv=(ev)=>{ w.style.left=(ev.clientX-dx)+'px'; w.style.top=(ev.clientY-dy)+'px'; };
-        document.addEventListener('mousemove',mv);
-        document.onmouseup=()=>document.removeEventListener('mousemove',mv);
+    drag:function(e,id){
+        const win=document.getElementById(id);
+        let shiftX = e.clientX - win.getBoundingClientRect().left;
+        let shiftY = e.clientY - win.getBoundingClientRect().top;
+        function moveAt(pageX, pageY) { win.style.left = pageX - shiftX + 'px'; win.style.top = pageY - shiftY + 'px'; }
+        function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
+        document.addEventListener('mousemove', onMouseMove);
+        document.onmouseup=function(){ document.removeEventListener('mousemove', onMouseMove); document.onmouseup=null; };
     },
-
-    getContent:function(app, wid){
-        if(app.type==='web') return `<div style="display:flex; flex-direction:column; height:100%;"><div class="browser-bar"><input class="url-in" value="${app.url}" onchange="document.getElementById('f-${wid}').src=this.value"></div><iframe id="f-${wid}" src="${app.url}" style="flex:1; border:none; background:white;"></iframe></div>`;
-        if(app.type==='iframe') return `<iframe src="${app.url}" style="width:100%; height:100%; border:none;"></iframe>`;
-        if(app.type==='files') return `<div style="display:flex; height:100%;"><div style="width:150px; background:#181818; padding:10px;"><div style="padding:5px; color:#aaa;"><i class="fas fa-hdd"></i> القرص C</div><div style="padding:5px; color:#aaa;"><i class="fas fa-cloud"></i> السحابة</div></div><div style="padding:15px; display:grid; grid-template-columns:repeat(auto-fill, minmax(80px,1fr)); gap:10px; align-content:start; flex:1;"><div style="text-align:center;"><i class="fas fa-folder" style="font-size:2.5rem; color:#ffca28;"></i><div>ملفاتي</div></div><div style="text-align:center;"><i class="fas fa-file-image" style="font-size:2.5rem; color:#fff;"></i><div>صورة.png</div></div></div></div>`;
-        if(app.type==='paint') return `<div style="display:flex; flex-direction:column; height:100%;"><div class="paint-tools"><div class="color-dot active" style="background:white" onclick="WindowManager.setColor('${wid}','white',this)"></div><div class="color-dot" style="background:#ff0055" onclick="WindowManager.setColor('${wid}','#ff0055',this)"></div><div class="color-dot" style="background:#00d2ff" onclick="WindowManager.setColor('${wid}','#00d2ff',this)"></div></div><canvas id="cvs-${wid}" style="flex:1; background:#000; cursor:crosshair;"></canvas></div>`;
-        if(app.type==='term') return `<div class="term-box" id="term-box-${wid}" onclick="document.getElementById('in-${wid}').focus()"><div>ZENITH GLOBAL [v10.0]</div><div>(c) Hatim Corp.</div><br><div id="logs-${wid}"></div><div style="display:flex;"><span>root@zenith:~$ </span><input id="in-${wid}" class="term-in" onkeypress="if(event.key==='Enter') WindowManager.runCmd('${wid}',this)"></div></div>`;
-        if(app.type==='settings') return `<div style="padding:20px;"><h3>الخلفية</h3><div style="display:flex; gap:10px; margin-top:10px;"><div onclick="document.getElementById('wallpaper').style.backgroundImage='url(https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2072)'" style="width:60px; height:40px; background:#333; cursor:pointer; border:1px solid #555;">1</div><div onclick="document.getElementById('wallpaper').style.backgroundImage='url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072)'" style="width:60px; height:40px; background:#333; cursor:pointer; border:1px solid #555;">2</div></div></div>`;
-        if(app.type==='games') return `<div style="text-align:center; padding:20px;"><h3>X-O (Tic Tac Toe)</h3><div class="xo-board" id="xo-${wid}">${[0,1,2,3,4,5,6,7,8].map(i=>`<div class="xo-cell" onclick="WindowManager.playXO('${wid}',this)"></div>`).join('')}</div><button onclick="WindowManager.open('games');WindowManager.close('${wid}')" style="padding:5px 15px; cursor:pointer;">إعادة اللعب</button></div>`;
-        if(app.type==='store') return `<div style="padding:20px; text-align:center;"><h2>المتجر</h2><div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; margin-top:20px;">${['VLC','Office','Discord','Zoom'].map(n=>`<div style="background:#222; padding:10px; border-radius:10px;">${n}<br><button style="margin-top:5px; background:var(--primary); border:none; border-radius:5px; padding:2px 10px; cursor:pointer;">تثبيت</button></div>`).join('')}</div></div>`;
-        return `<div style="padding:20px;">App Content</div>`;
+    close:function(id){document.getElementById(id)?.remove();},
+    max:function(id){
+        const win=document.getElementById(id);
+        if(win.style.top!=='0px'){win.dataset.oldLeft=win.style.left; win.dataset.oldTop=win.style.top; win.dataset.oldWidth=win.style.width; win.dataset.oldHeight=win.style.height; win.style.left='0px'; win.style.top='35px'; win.style.width='100%'; win.style.height='calc(100% - 115px)';}
+        else{win.style.left=win.dataset.oldLeft; win.style.top=win.dataset.oldTop; win.style.width=win.dataset.oldWidth; win.style.height=win.dataset.oldHeight;}
     },
-
-    // --- GAMES LOGIC (X-O) ---
-    playXO: function(wid, cell) {
-        if(cell.innerText) return;
-        cell.innerText = 'X'; cell.style.color = '#00d2ff';
-        const board = Array.from(document.querySelectorAll(`#xo-${wid} .xo-cell`));
-        const empty = board.filter(c => !c.innerText);
-        if(empty.length > 0) {
-            const r = Math.floor(Math.random() * empty.length);
-            setTimeout(() => { empty[r].innerText = 'O'; empty[r].style.color = '#f80759'; }, 300);
-        }
-    },
-
-    // --- PAINT LOGIC ---
-    initPaint: function(wid) {
-        setTimeout(() => {
-            const c = document.getElementById(`cvs-${wid}`);
-            if(!c) return;
-            const ctx = c.getContext('2d');
-            c.width = c.clientWidth; c.height = c.clientHeight;
-            c.dataset.color = 'white';
-            let p = false;
-            c.onmousedown = (e) => { p=true; draw(e); };
-            c.onmouseup = () => { p=false; ctx.beginPath(); };
-            c.onmousemove = draw;
-            function draw(e) {
-                if(!p) return;
-                const r = c.getBoundingClientRect();
-                ctx.lineWidth = 4; ctx.lineCap = 'round';
-                ctx.strokeStyle = c.dataset.color;
-                ctx.lineTo(e.clientX - r.left, e.clientY - r.top);
-                ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.clientX - r.left, e.clientY - r.top);
-            }
-        }, 100);
-    },
-    setColor: function(wid, col, btn) {
-        document.getElementById(`cvs-${wid}`).dataset.color = col;
-        btn.parentElement.querySelectorAll('.color-dot').forEach(e=>e.classList.remove('active'));
-        btn.classList.add('active');
-    },
-
-    // --- TERM LOGIC ---
-    initTerm: function(wid) { setTimeout(()=>document.getElementById(`in-${wid}`).focus(), 100); },
-    runCmd: function(wid, input) {
-        const val = input.value.trim();
-        const log = document.getElementById(`logs-${wid}`);
-        input.value = '';
-        log.innerHTML += `<div>root@zenith:~$ ${val}</div>`;
-        let res = '';
-        if(val === 'help') res = 'cmds: help, clear, date, whoami';
-        else if(val === 'date') res = new Date().toString();
-        else if(val === 'whoami') res = 'Commander Hatim';
-        else if(val === 'clear') log.innerHTML = '';
-        else if(val) res = 'Command not found.';
-        if(res) log.innerHTML += `<div style="color:#aaa;">${res}</div>`;
-        document.getElementById(`term-box-${wid}`).scrollTop = document.getElementById(`term-box-${wid}`).scrollHeight;
+    termInput:function(id){
+        const input=document.getElementById('term-in-'+id);
+        const box=document.getElementById('term-'+id);
+        box.innerHTML+=`<br>&gt; ${input.value}`;
+        input.value='';
+        box.scrollTop=box.scrollHeight;
     }
 };
 
-function toggleStart() {
-    const m = document.getElementById('start-menu');
-    m.classList.toggle('show');
-}
+function toggleStart(){document.getElementById('start-menu').classList.toggle('show');}
 
-// Close Start Menu on outside click
-document.addEventListener('click', (e) => {
-    const m = document.getElementById('start-menu');
-    const dock = document.getElementById('dock');
-    if(m.classList.contains('show') && !m.contains(e.target) && !dock.contains(e.target)) {
-        m.classList.remove('show');
-    }
-});
-
-// Init System
 System.init();
-
 </script>
 </body>
 </html>
