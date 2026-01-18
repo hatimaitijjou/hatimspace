@@ -1,93 +1,35 @@
 :root {
-    --accent: #00d2ff;
-    --bg-dark: #050505;
-    --glass: rgba(255, 255, 255, 0.05);
-    --glass-heavy: rgba(10, 10, 10, 0.8);
+    --cyan: #00e5ff;
+    --glass: rgba(20, 20, 20, 0.85);
     --border: rgba(255, 255, 255, 0.1);
 }
 
-body, html {
-    margin: 0; padding: 0; height: 100%;
-    overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: var(--bg-dark); color: white;
-}
-
-#background {
-    position: fixed; inset: 0; z-index: -1;
-    background: radial-gradient(circle at center, #111, #000);
-}
+body, html { margin: 0; padding: 0; height: 100%; background: #000; color: white; overflow: hidden; font-family: sans-serif; }
 
 /* شاشة القفل */
-#lock-screen {
-    position: fixed; inset: 0; z-index: 9999;
-    background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
-    display: flex; justify-content: center; align-items: center;
-    transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
+#lock-screen { position: fixed; inset: 0; z-index: 9999; display: flex; justify-content: center; align-items: center; background: #000; transition: 0.8s; }
+.lock-container { text-align: center; }
+.avatar { font-size: 80px; color: var(--cyan); margin-bottom: 15px; }
+.input-group { display: flex; background: #1a1a1a; padding: 5px; border-radius: 50px; border: 1px solid var(--border); margin: 20px auto; }
+.input-group input { background: none; border: none; color: white; padding: 10px 20px; outline: none; }
+.input-group button { background: var(--cyan); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
 
-.lock-content { text-align: center; width: 300px; }
-.avatar { font-size: 80px; color: var(--accent); margin-bottom: 20px; }
-#lock-clock { font-size: 60px; margin: 10px 0; font-weight: 300; }
-
-.login-box {
-    display: flex; gap: 10px; background: var(--glass);
-    padding: 10px; border-radius: 50px; border: 1px solid var(--border);
-}
-
-.login-box input {
-    background: none; border: none; color: white;
-    padding: 5px 15px; width: 100%; outline: none;
-}
-
-.login-box button {
-    background: var(--accent); border: none; width: 40px; height: 40px;
-    border-radius: 50%; cursor: pointer; transition: 0.3s;
-}
-
-/* سطح المكتب والأيقونات */
-#desktop {
-    padding: 30px; display: grid;
-    grid-template-columns: repeat(auto-fill, 100px);
-    grid-auto-rows: 100px; gap: 20px;
-}
-
-.icon {
-    display: flex; flex-direction: column; align-items: center;
-    cursor: pointer; transition: 0.2s; padding: 10px; border-radius: 10px;
-}
-
-.icon:hover { background: var(--glass); transform: translateY(-5px); }
-.icon i { font-size: 40px; margin-bottom: 10px; }
+/* سطح المكتب */
+#desktop { position: relative; height: 100vh; padding: 20px; background: radial-gradient(circle, #111, #000); }
+#icons-grid { display: grid; grid-template-columns: repeat(auto-fill, 100px); gap: 20px; }
+.icon { text-align: center; cursor: pointer; padding: 10px; border-radius: 10px; transition: 0.3s; }
+.icon:hover { background: rgba(255,255,255,0.1); }
+.icon i { font-size: 40px; display: block; margin-bottom: 5px; }
 
 /* النوافذ */
-.window {
-    position: absolute; width: 600px; height: 400px;
-    background: var(--glass-heavy); backdrop-filter: blur(15px);
-    border-radius: 12px; border: 1px solid var(--border);
-    display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-}
-
-.window .bar {
-    padding: 12px 20px; background: rgba(255,255,255,0.05);
-    display: flex; justify-content: space-between; cursor: move;
-}
-
-.close-btn { color: #ff5f56; cursor: pointer; font-size: 20px; }
+.window { position: absolute; width: 400px; min-height: 300px; background: var(--glass); border: 1px solid var(--border); border-radius: 15px; backdrop-filter: blur(10px); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.window .bar { padding: 10px 15px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; cursor: move; }
+.window .body { padding: 20px; flex: 1; }
 
 /* شريط المهام */
-#taskbar {
-    position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
-    background: var(--glass-heavy); border-radius: 20px;
-    padding: 10px 20px; display: flex; align-items: center; gap: 20px;
-    border: 1px solid var(--border); z-index: 9000;
-}
+#taskbar { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); background: var(--glass); padding: 10px 30px; border-radius: 30px; display: flex; gap: 20px; align-items: center; border: 1px solid var(--border); }
+.start-btn { color: var(--cyan); font-size: 20px; cursor: pointer; }
 
-.start-btn { font-size: 24px; color: var(--accent); cursor: pointer; }
-
-/* نجوم الخلفية */
-.star {
-    position: absolute; background: white; border-radius: 50%;
-    animation: pulse 2s infinite alternate;
-}
-
-@keyframes pulse { from {opacity: 0.2;} to {opacity: 1;} }
+/* أزرار الإعدادات */
+.set-btn { background: #333; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%; }
+.set-btn.danger { background: #cc3300; }
