@@ -1,172 +1,187 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="hatim-root">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hatim OS Infinity - Stable Edition</title>
+    <title>Hatim OS Infinity - Open Source Project</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <style>
+        /* --- المظهر العام (يمكن للمطورين تعديله من هنا) --- */
         :root {
-            --accent: #ff0055; --bg: #0a0a0a; --glass: rgba(20, 20, 20, 0.9);
+            --primary: #ff0055;
+            --bg-dark: #0a0a0a;
+            --glass: rgba(25, 25, 25, 0.9);
             --border: rgba(255, 255, 255, 0.1);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body, html { height: 100%; width: 100%; overflow: hidden; background: var(--bg); color: white; font-family: sans-serif; }
 
-        /* شاشة القفل */
-        #lock-screen {
-            position: fixed; inset: 0; z-index: 9999;
-            background: radial-gradient(circle, #222, #000);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: var(--bg-dark); font-family: 'Segoe UI', sans-serif; color: white; }
+
+        /* --- شاشة تسجيل الدخول --- */
+        #login-screen {
+            position: fixed; inset: 0; z-index: 1000;
+            background: linear-gradient(45deg, #000, #1a0008);
+            display: flex; align-items: center; justify-content: center;
         }
-        .lock-box { background: var(--glass); padding: 30px; border-radius: 20px; border: 1px solid var(--border); text-align: center; width: 300px; }
 
-        /* سطح المكتب */
+        .login-card {
+            background: var(--glass); padding: 40px; border-radius: 20px;
+            border: 1px solid var(--border); text-align: center; width: 350px;
+        }
+
+        .login-card input {
+            width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px;
+            border: none; background: #222; color: white; text-align: center;
+        }
+
+        .login-card button {
+            width: 100%; padding: 12px; background: var(--primary);
+            border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: bold;
+        }
+
+        /* --- سطح المكتب --- */
         #desktop {
             position: relative; height: 100vh; width: 100vw;
-            background: url('https://w.wallhaven.cc/full/j3/wallhaven-j3m8p9.jpg') center/cover;
-            display: none;
+            background: url('https://w.wallhaven.cc/full/85/wallhaven-85m7qy.jpg') center/cover;
+            display: none; /* يظهر بعد تسجيل الدخول */
         }
 
-        .icons-grid { display: grid; grid-template-columns: repeat(auto-fill, 100px); gap: 20px; padding: 30px; }
-        .app-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.2s; }
-        .app-item:hover { transform: scale(1.1); }
-        .app-item i { font-size: 40px; margin-bottom: 10px; color: var(--accent); }
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, 110px); gap: 20px; padding: 40px; }
+        
+        .app-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .app-item i { font-size: 40px; color: var(--primary); margin-bottom: 8px; }
 
-        /* النوافذ */
+        /* --- النوافذ --- */
         .window {
-            position: absolute; width: 500px; height: 400px;
+            position: absolute; width: 600px; height: 450px;
             background: var(--glass); backdrop-filter: blur(20px);
-            border-radius: 12px; border: 1px solid var(--border);
-            display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            overflow: hidden; z-index: 10;
-        }
-        .win-header { padding: 12px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; cursor: move; }
-        .win-body { flex: 1; overflow: auto; background: transparent; }
-        .close-btn { color: #ff5f56; cursor: pointer; font-size: 20px; }
-
-        /* شريط المهام */
-        #taskbar {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: rgba(0,0,0,0.8); height: 50px;
-            display: flex; align-items: center; padding: 0 20px; gap: 20px;
-            border-top: 1px solid var(--border); z-index: 1000;
+            border-radius: 15px; border: 1px solid var(--border);
+            display: flex; flex-direction: column; overflow: hidden; z-index: 10;
         }
 
-        video { width: 100%; height: 100%; object-fit: cover; }
+        .window-header { padding: 15px; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; cursor: move; }
+        .window-body { flex: 1; position: relative; }
         iframe { width: 100%; height: 100%; border: none; background: white; }
+
+        /* --- شريط المهام --- */
+        #taskbar {
+            position: fixed; bottom: 0; width: 100%; height: 50px;
+            background: rgba(0,0,0,0.8); display: flex; align-items: center;
+            padding: 0 20px; border-top: 1px solid var(--border);
+        }
     </style>
 </head>
-<body onload="System.init()">
+<body onload="OS.init()">
 
-    <div id="lock-screen">
-        <div class="lock-box">
-            <h1 id="lock-time" style="font-size: 40px; margin-bottom: 20px;">00:00</h1>
-            <input type="password" id="pass-in" placeholder="كلمة المرور (1234)" style="width:100%; padding:10px; border-radius:8px; border:none; background:#222; color:white; margin-bottom:10px; text-align:center;">
-            <button onclick="System.login()" style="width:100%; padding:10px; border-radius:8px; border:none; background:var(--accent); color:white; font-weight:bold; cursor:pointer;">دخول</button>
+    <div id="login-screen">
+        <div class="login-card">
+            <h2 id="login-title">Hatim OS Infinity</h2>
+            <p style="opacity: 0.6; font-size: 12px;">Open Source Project</p>
+            <input type="text" id="username" placeholder="Username (حاتم)">
+            <input type="password" id="password" placeholder="Password (1234)">
+            <button onclick="OS.authenticate()">Login</button>
+            <p style="font-size: 10px; margin-top: 15px; color: #666;">Developer Mode: Enabled</p>
         </div>
     </div>
 
     <div id="desktop">
-        <div class="icons-grid" id="icons-container"></div>
-        <div id="windows-container"></div>
+        <div class="app-grid" id="app-grid"></div>
+        <div id="window-manager"></div>
         <div id="taskbar">
-            <i class="fas fa-th-large" style="color:var(--accent); font-size:24px;"></i>
-            <div id="task-time" style="margin-right: auto; font-family: monospace;">00:00</div>
+            <i class="fas fa-microchip" style="color:var(--primary); font-size: 24px;"></i>
+            <span id="clock" style="margin-left: auto; font-family: monospace;">00:00</span>
         </div>
     </div>
 
     <script>
-        const System = {
-            z: 100,
+        /* --- Hatim OS Kernel (Open Source Edition) ---
+           يمكن للمطورين التعديل على المصفوفة بالأسفل لإضافة تطبيقات جديدة بسهولة.
+        */
+
+        const OS = {
+            isLoggedIn: false,
+            zIndex: 100,
+
+            // مصفوفة التطبيقات (سهلة التعديل للمطورين)
             apps: [
-                { id: 'cam', name: 'الكاميرا', icon: 'fa-camera' },
-                { id: 'web', name: 'المتصفح', icon: 'fa-globe' },
-                { id: 'note', name: 'الملاحظات', icon: 'fa-file-alt' },
-                { id: 'paint', name: 'الرسام', icon: 'fa-paint-brush' },
-                { id: 'calc', name: 'الحاسبة', icon: 'fa-calculator' }
+                { id: 'browser', name: 'المتصفح', icon: 'fa-globe', url: 'https://www.bing.com' },
+                { id: 'terminal', name: 'Terminal', icon: 'fa-terminal', content: '<h2>Hatim OS Terminal</h2><p>Type "help" for commands...</p>' },
+                { id: 'editor', name: 'الكود', icon: 'fa-code', url: 'https://codesandbox.io' },
+                { id: 'settings', name: 'الإعدادات', icon: 'fa-sliders', content: '<p>إصدار مفتوح المصدر 1.0.0</p>' }
             ],
 
             init() {
                 this.updateClock();
                 setInterval(() => this.updateClock(), 1000);
-                this.renderIcons();
+                this.renderApps();
             },
 
             updateClock() {
-                const t = new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
-                document.getElementById('lock-time').innerText = t;
-                document.getElementById('task-time').innerText = t;
+                const now = new Date();
+                document.getElementById('clock').innerText = now.toLocaleTimeString();
             },
 
-            login() {
-                const p = document.getElementById('pass-in').value;
-                if(p === '1234' || p === '') { // يسمح بالدخول بـ 1234 أو فارغ للتجربة
-                    document.getElementById('lock-screen').style.display = 'none';
+            authenticate() {
+                const user = document.getElementById('username').value;
+                const pass = document.getElementById('password').value;
+
+                // نظام دخول بسيط (يمكن تطويره لربطه بـ Firebase)
+                if(user !== "" && pass === "1234") {
+                    document.getElementById('login-screen').style.display = 'none';
                     document.getElementById('desktop').style.display = 'block';
-                } else { alert("كلمة المرور 1234"); }
+                    this.isLoggedIn = true;
+                } else {
+                    alert("البيانات خاطئة (جرب أي مستخدم وكلمة 1234)");
+                }
             },
 
-            renderIcons() {
-                const container = document.getElementById('icons-container');
+            renderApps() {
+                const grid = document.getElementById('app-grid');
                 this.apps.forEach(app => {
-                    const div = document.createElement('div');
-                    div.className = 'app-item';
-                    div.onclick = () => this.openApp(app.id, app.name);
-                    div.innerHTML = `<i class="fas ${app.icon}"></i><span>${app.name}</span>`;
-                    container.appendChild(div);
+                    const el = document.createElement('div');
+                    el.className = 'app-item';
+                    el.onclick = () => this.launchApp(app);
+                    el.innerHTML = `<i class="fas ${app.icon}"></i><span>${app.name}</span>`;
+                    grid.appendChild(el);
                 });
             },
 
-            openApp(id, name) {
-                if(document.getElementById('win-' + id)) return;
-                const win = document.createElement('div');
-                win.className = 'window'; win.id = 'win-' + id;
-                win.style.top = '100px'; win.style.left = '100px';
-                win.style.zIndex = ++this.z;
-                
-                win.innerHTML = `
-                    <div class="win-header" onmousedown="System.drag(event, this)">
-                        <span>${name}</span>
-                        <i class="fas fa-times-circle close-btn" onclick="System.closeApp('${id}')"></i>
-                    </div>
-                    <div class="win-body">${this.getUI(id)}</div>`;
-                document.getElementById('windows-container').appendChild(win);
-                if(id === 'cam') this.startCam();
-            },
+            launchApp(app) {
+                if(document.getElementById('win-' + app.id)) return;
 
-            getUI(id) {
-                if(id === 'cam') return `<video id="video-feed" autoplay playsinline></video>`;
-                if(id === 'web') return `<iframe src="https://www.bing.com"></iframe>`;
-                if(id === 'note') return `<textarea style="width:100%; height:100%; background:none; color:white; padding:15px; border:none; outline:none; font-size:18px;"></textarea>`;
-                if(id === 'paint') return `<iframe src="https://jspaint.app"></iframe>`;
-                if(id === 'calc') return `<iframe src="https://www.google.com/search?q=calculator&igu=1"></iframe>`;
-                return ``;
+                const win = document.createElement('div');
+                win.className = 'window';
+                win.id = 'win-' + app.id;
+                win.style.top = '100px'; win.style.left = '150px';
+                win.style.zIndex = ++this.zIndex;
+
+                win.innerHTML = `
+                    <div class="window-header" onmousedown="OS.drag(event, this)">
+                        <span>${app.name}</span>
+                        <i class="fas fa-times" onclick="OS.closeApp('${app.id}')" style="cursor:pointer; color:red;"></i>
+                    </div>
+                    <div class="window-body">
+                        ${app.url ? `<iframe src="${app.url}"></iframe>` : `<div style="padding:20px;">${app.content}</div>`}
+                    </div>`;
+
+                document.getElementById('window-manager').appendChild(win);
             },
 
             closeApp(id) {
-                const win = document.getElementById('win-' + id);
-                if(id === 'cam') {
-                    const v = document.getElementById('video-feed');
-                    if(v && v.srcObject) v.srcObject.getTracks().forEach(t => t.stop());
-                }
-                win.remove();
-            },
-
-            startCam() {
-                const v = document.getElementById('video-feed');
-                navigator.mediaDevices.getUserMedia({ video: true })
-                .then(s => v.srcObject = s)
-                .catch(e => alert("تأكد من إعطاء صلاحية الكاميرا في المتصفح"));
+                document.getElementById('win-' + id).remove();
             },
 
             drag(e, header) {
-                const win = header.parentElement; win.style.zIndex = ++this.z;
-                let ox = e.clientX - win.offsetLeft, oy = e.clientY - win.offsetTop;
+                const win = header.parentElement;
+                win.style.zIndex = ++this.zIndex;
+                let ox = e.clientX - win.offsetLeft;
+                let oy = e.clientY - win.offsetTop;
+
                 document.onmousemove = (ev) => {
                     win.style.left = ev.clientX - ox + "px";
                     win.style.top = ev.clientY - oy + "px";
                 };
+
                 document.onmouseup = () => document.onmousemove = null;
             }
         };
