@@ -1,85 +1,93 @@
 :root {
     --accent: #00d2ff;
-    --glass: rgba(20, 20, 20, 0.7);
+    --bg-dark: #050505;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-heavy: rgba(10, 10, 10, 0.8);
     --border: rgba(255, 255, 255, 0.1);
 }
 
-body {
-    margin: 0; padding: 0; height: 100vh;
-    background: #050505; color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
+body, html {
+    margin: 0; padding: 0; height: 100%;
+    overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg-dark); color: white;
 }
 
-/* النجوم */
-.star {
-    position: absolute; width: 2px; height: 2px;
-    background: white; border-radius: 50%;
-    animation: blink 2s infinite;
+#background {
+    position: fixed; inset: 0; z-index: -1;
+    background: radial-gradient(circle at center, #111, #000);
 }
-@keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-/* سطح المكتب */
+/* شاشة القفل */
+#lock-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
+    display: flex; justify-content: center; align-items: center;
+    transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lock-content { text-align: center; width: 300px; }
+.avatar { font-size: 80px; color: var(--accent); margin-bottom: 20px; }
+#lock-clock { font-size: 60px; margin: 10px 0; font-weight: 300; }
+
+.login-box {
+    display: flex; gap: 10px; background: var(--glass);
+    padding: 10px; border-radius: 50px; border: 1px solid var(--border);
+}
+
+.login-box input {
+    background: none; border: none; color: white;
+    padding: 5px 15px; width: 100%; outline: none;
+}
+
+.login-box button {
+    background: var(--accent); border: none; width: 40px; height: 40px;
+    border-radius: 50%; cursor: pointer; transition: 0.3s;
+}
+
+/* سطح المكتب والأيقونات */
 #desktop {
     padding: 30px; display: grid;
-    grid-template-columns: repeat(auto-fill, 110px);
-    grid-auto-rows: 110px; gap: 20px;
+    grid-template-columns: repeat(auto-fill, 100px);
+    grid-auto-rows: 100px; gap: 20px;
 }
 
 .icon {
     display: flex; flex-direction: column; align-items: center;
-    cursor: pointer; transition: 0.3s; padding: 10px; border-radius: 12px;
+    cursor: pointer; transition: 0.2s; padding: 10px; border-radius: 10px;
 }
-.icon:hover { background: rgba(255, 255, 255, 0.1); transform: scale(1.05); }
-.icon i { font-size: 40px; margin-bottom: 8px; }
-.icon span { font-size: 13px; text-shadow: 0 2px 4px black; }
+
+.icon:hover { background: var(--glass); transform: translateY(-5px); }
+.icon i { font-size: 40px; margin-bottom: 10px; }
 
 /* النوافذ */
 .window {
-    position: absolute; width: 500px; height: 350px;
-    background: var(--glass); backdrop-filter: blur(15px);
-    border: 1px solid var(--border); border-radius: 12px;
-    display: flex; flex-direction: column; overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    top: 100px; left: 100px;
+    position: absolute; width: 600px; height: 400px;
+    background: var(--glass-heavy); backdrop-filter: blur(15px);
+    border-radius: 12px; border: 1px solid var(--border);
+    display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
+
 .window .bar {
-    padding: 12px; background: rgba(255,255,255,0.05);
+    padding: 12px 20px; background: rgba(255,255,255,0.05);
     display: flex; justify-content: space-between; cursor: move;
 }
-.close-win { cursor: pointer; color: #ff5f56; font-weight: bold; }
-.window .body { flex: 1; padding: 10px; }
+
+.close-btn { color: #ff5f56; cursor: pointer; font-size: 20px; }
 
 /* شريط المهام */
 #taskbar {
-    position: fixed; bottom: 15px; left: 50%;
-    transform: translateX(-50%); background: var(--glass);
-    padding: 8px 25px; border-radius: 20px;
-    display: flex; align-items: center; gap: 20px;
-    backdrop-filter: blur(10px); border: 1px solid var(--border);
+    position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+    background: var(--glass-heavy); border-radius: 20px;
+    padding: 10px 20px; display: flex; align-items: center; gap: 20px;
+    border: 1px solid var(--border); z-index: 9000;
 }
-.start-btn { font-size: 22px; cursor: pointer; color: var(--accent); }
 
-/* شاشة القفل */
-#lock {
-    position: fixed; inset: 0; background: radial-gradient(circle at center, #111, #000);
-    z-index: 10000; display: flex; flex-direction: column;
-    justify-content: center; align-items: center; transition: 1s cubic-bezier(0.8, 0, 0.2, 1);
-}
-.blink { animation: fade 1.5s infinite; color: var(--accent); }
-@keyframes fade { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.start-btn { font-size: 24px; color: var(--accent); cursor: pointer; }
 
-/* المتجر */
-.overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-    z-index: 11000; display: none; padding: 50px;
+/* نجوم الخلفية */
+.star {
+    position: absolute; background: white; border-radius: 50%;
+    animation: pulse 2s infinite alternate;
 }
-.store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
-.store-card {
-    background: #111; padding: 20px; border-radius: 15px;
-    text-align: center; border: 1px solid var(--border);
-}
-.store-card button {
-    background: var(--accent); border: none; padding: 8px 15px;
-    border-radius: 8px; cursor: pointer; margin-top: 10px;
-}
+
+@keyframes pulse { from {opacity: 0.2;} to {opacity: 1;} }
