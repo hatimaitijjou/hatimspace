@@ -1,0 +1,74 @@
+:root{
+ --bg:#050505;
+ --surface:rgba(18,18,18,.7);
+ --accent:#00d2ff;
+ --border:rgba(255,255,255,.08);
+}
+
+*{box-sizing:border-box;font-family:system-ui}
+body{margin:0;background:black;color:white;height:100vh;overflow:hidden}
+
+#space{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle,#111,#000)}
+
+.star{position:absolute;background:white;border-radius:50%;opacity:.6}
+
+#desktop{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,90px);
+ grid-auto-rows:100px;
+ gap:20px;
+ padding:30px;
+}
+
+.icon{
+ text-align:center;
+ cursor:pointer;
+ border-radius:15px;
+ padding:10px;
+}
+.icon:hover{background:rgba(255,255,255,.06)}
+.icon i{font-size:32px;color:var(--accent)}
+.icon span{font-size:12px}
+
+.window{
+ position:absolute;
+ width:75vw;height:70vh;
+ background:var(--surface);
+ backdrop-filter:blur(30px);
+ border-radius:20px;
+ border:1px solid var(--border);
+ display:flex;
+ flex-direction:column;
+}
+
+.bar{
+ padding:12px;
+ background:rgba(255,255,255,.05);
+ cursor:grab;
+ display:flex;
+ justify-content:space-between;
+}
+
+#taskbar{
+ position:fixed;
+ bottom:20px;
+ left:50%;
+ transform:translateX(-50%);
+ background:var(--surface);
+ padding:15px 25px;
+ border-radius:25px;
+ display:flex;
+ gap:20px;
+}
+
+#lock{
+ position:fixed;
+ inset:0;
+ background:black;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ transition:1s;
+ z-index:999;
+}
